@@ -1,0 +1,200 @@
+<div class="page-width film-page">
+  {% if section.settings.title != blank %}
+    <div class="section-header text-center">
+      <h1>{{ section.settings.title | escape }}</h1>
+    </div>
+  {% endif %}
+
+
+  {% if section.blocks.size > 0 %}
+    <ul class="film-bar">
+      {% for block in section.blocks %}
+        <li class="film-item" {{ block.shopify_attributes }}>
+          <div class="film-item-vid">
+            {% if block.settings.link != blank %}
+            <div class="vid-container">
+            <iframe src="{{ block.settings.link }}" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            {% endif %}
+            </div>
+          </div>
+          <div class="film-item-description">
+            <h3>{{ block.settings.title }}</h3>
+            {{ block.settings.description }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if section.blocks.size == 0 %}
+    {% include 'no-blocks' %}
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Staggered Film",
+    "class": "film-section",
+    "max_blocks": 20,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "film"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "film_item",
+        "name": "film",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title / Publication"
+          },
+          {
+            "type": "text",
+            "id": "link",
+            "label": "Link",
+            "info": "From the Share > Embed, format: https://player.vimeo.com/video/178376025"
+          },
+          {
+          	"type": "richtext",
+          	"id": "description",
+          	"label": "Description"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "film Items",
+        "category": "Video",
+        "blocks": [
+          {
+            "type": "film_item"
+          },
+          {
+            "type": "film_item"
+          },
+          {
+            "type": "film_item"
+          },
+          {
+            "type": "film_item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% javascript %}
+
+// Find all iframes
+var $iframes = $( "iframe" );
+ 
+// Find &#x26; save the aspect ratio for all iframes
+$iframes.each(function () {
+  $( this ).data( "ratio", this.height / this.width )
+    // Remove the hardcoded width &#x26; height attributes
+    .removeAttr( "width" )
+    .removeAttr( "height" );
+});
+ 
+// Resize the iframes when the window is resized
+$( window ).resize( function () {
+  $iframes.each( function() {
+    // Get the parent container&#x27;s width
+    var width = $( this ).parent().width();
+    $( this ).width( width )
+      .height( width * $( this ).data( "ratio" ) );
+  });
+// Resize to fix all iframes on page load.
+}).resize();
+
+{% endjavascript %}
+
+{% stylesheet %}
+li.film-item {
+  position: relative;
+}
+.film-item-hover {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: rgba(0,0,0,0);
+    transition: all .4s ease;
+}
+.film-item-hover:hover {
+    color: #232323;
+    background-color: rgba(233,233,233,.8);
+}
+.film-item-hover p {
+  color: rgba(0,0,0,0);
+  transition: all .25s ease;
+}
+.film-item-hover:hover p {
+    color: #232323;
+}
+
+ul.film-bar {
+    display: flex;
+    flex-direction: column;
+}
+
+li.film-item {
+    flex: 1 1 100%;
+    text-align: center;
+    flex-direction: column;
+}
+/* desktop only */
+@media screen and (min-width: 960px)
+{
+  li.film-item { 
+    flex-direction: row;  
+  }
+  .film-item-description {
+    flex: 1 1 40%;
+  }
+  li.film-item:nth-of-type(even) .film-item-vid {
+    order: 2;
+  }
+  li.film-item:nth-of-type(even) .film-item-description {
+    padding-left: 0;
+    padding-right: 1em;
+  }
+  li.film-item:nth-of-type(odd) .film-item-description {
+    padding-left: 1em;
+  }
+}
+li.film-item {
+    display: flex;
+    justify-content: space-between;
+}
+.film-item-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.film-item-vid {
+    flex: 1 1 60%;
+}
+/* mobile only */
+@media screen and (max-width: 960px) {
+  .film-item-description {
+    order: -1;
+  }
+  li.film-item {
+    padding-top: 1em;
+  }
+}
+
+
+{% endstylesheet %}

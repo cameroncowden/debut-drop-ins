@@ -1,0 +1,33 @@
+{% unless collection_image_size %}
+  {%- assign collection_image_size = '450x450' -%}
+{% endunless %}
+
+{% if collection.empty? %}
+  {% comment %}add default state for collection block in theme editor{% endcomment %}
+  {% assign collection_image_url = '' %}
+{% else %}
+  {% if collection.image %}
+    {% capture collection_image_url %}{{ collection | img_url: collection_image_size, crop: 'top' }}{% endcapture %}
+  {% elsif collection.products.first %}
+    {% capture collection_image_url %}{{ collection.products.first | img_url: collection_image_size, crop: 'top' }}{% endcapture %}
+  {% endif %}
+{% endif %}
+<div class="collection-grid-item">
+  <a href="{% if collection.empty? %}#{% else %}{{ collection.url }}{% endif %}" class="collection-grid-item__link">
+    <div class="collection-grid-item__overlay" style="background-image: url({{ collection_image_url }})">
+      {% if collection.empty? %}
+        {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+        {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+    <div class="collection-grid-item__title-wrapper">
+      <h3 class="collection-grid-item__title">
+        {% if collection.empty? %}
+          {{ 'homepage.onboarding.collection_title' | t }}
+        {% else %}
+          {{ collection.title }}
+        {% endif %}
+      </h3>
+    </div>
+  </a>
+</div>

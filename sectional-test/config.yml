@@ -1,0 +1,13 @@
+---
+:api_key: f6269cc42abf2699bb5a87b1c15bb3c0
+:password: bcf0bcab74e1db6b560f55e1cb7ea9e9
+:store: sectional-test.myshopify.com
+:theme_id: 70500933 
+:whitelist_files:
+- layout/
+- assets/
+- config/
+- snippets/
+- sections/
+- templates/
+- locales/

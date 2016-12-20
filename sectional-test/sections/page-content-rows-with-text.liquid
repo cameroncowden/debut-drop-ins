@@ -1,0 +1,245 @@
+{% assign i = 0 %}
+{% for block in section.blocks %}
+<div class="feature-row {% unless block.settings.layout == 'center' %} bg-img bg-img-{{ i }} {% endunless %} content-row content-row-{{ i }}" >
+  {% capture image_layout %}
+    <div class="feature-row__item content-image">
+      {% if block.settings.image != blank %}
+        {{ block.settings.image | img_url: '600x600' | img_tag: block.settings.image.alt, 'feature-row__image' }}
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+  <div class="feature-row {% if block.settings.layout == 'center' %}spread-layout{% endif %}">
+    {% if block.settings.layout == 'left' %}
+      {{ image_layout }}
+    {% endif %}
+
+    {% if block.settings.layout == 'left' or block.settings.layout == 'right' %}
+    <div class="feature-row__item feature-row__text feature-row__text--{{ block.settings.layout }}">
+      {% if block.settings.title != blank %}
+        <h2 class="h3">{{ block.settings.title | escape }}</h2>
+      {% endif %}
+      {% if block.settings.subtext != blank %}
+        <div class="rte-setting featured-row__subtext featured-row__subtext-header">{{ block.settings.subtext }}</div>
+      {% endif %}
+      {% if block.settings.text != blank %}
+        <div class="rte-setting featured-row__subtext">{{ block.settings.text }}</div>
+      {% endif %}
+      {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+        <a href="{{ block.settings.button_link }}" class="btn">
+          {{ block.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if block.settings.layout == 'right' %}
+      {{ image_layout }}
+    {% endif %}
+
+    {% if block.settings.layout == 'center' %}
+      <div class="feature-row__item feature-row__text feature-row__text--centered">
+        <h2 class="h3">{{ block.settings.title | escape }}</h2>
+      </div>
+      <div class="feature-row__item feature-row__text feature-row__text--centered last">
+        <div class="rte-setting featured-row__subtext featured-row__subtext-header">{{ block.settings.subtext }}</div>
+        <div class="rte-setting featured-row__subtext">{{ block.settings.text }}</div>
+      </div>
+      <div class="feature-row__item feature-row__text--centered image-cut-hex">
+      {% if block.settings.image != blank %}
+        {{ block.settings.image | img_url: '600x600' | img_tag: block.settings.image.alt, 'feature-row__image' }}
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+<style>
+ 
+
+ .bg-img-{{ i }} {
+    background: url({{ block.settings.image | img_url: 'master' }});
+    background-size: cover;
+    background-position: center center;
+ }
+ @media screen and (min-width: 750px) {
+  .feature-row__item.content-image {
+    visibility: hidden;
+  }
+ }
+ @media screen and (max-width: 750px) {
+  .bg-img-{{ i }} {
+    background: white;
+  }
+ }
+</style>
+{% assign i = i | plus: 1 %}
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Our Story",
+  "class": "our-story-section",
+  "settings": [
+        {
+            "type": "text",
+            "id": "section-title",
+            "label": "Page Heading",
+            "default": "Our Story"
+          }
+      ],
+  "blocks": [
+    {
+      "type": "content-row",
+      "name": "Content Row",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Image on left"
+            },
+            {
+              "value": "right",
+              "label": "Image on right"
+            },
+            {
+              "value": "center",
+              "label": "Image centered (cuts out pic in clip path shape!)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Image with text"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "label": "Secondary Text",
+          "default": "<p>This is an optional secondary text field.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ]
+}
+
+{% endschema %}
+
+
+{% stylesheet %}
+.image-cut-hex {
+  -webkit-clip-path: polygon(50% 0, 100% 0, 100% 75%, 50% 100%, 0 100%, 0 25%);
+  clip-path: polygon(50% 0, 100% 0, 100% 75%, 50% 100%, 0 100%, 0 25%);
+  flex: 0 1 50%;
+}
+.feature-row__item.feature-row__text.feature-row__text--centered {
+    flex: 0 1 20%;
+}
+.feature-row__item.feature-row__text.feature-row__text--centered.last {
+  order: 2;
+  flex: 0 1 35%;
+}
+.content-row {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.featured-row__subtext-header {
+  font-weight: bold;
+}
+
+@media only screen and (min-width: 750px) {
+  .feature-row__item.feature-row__text.feature-row__text--centered.last {
+    padding-left: 35px;
+  }
+  .content-row {
+    padding-top: 55px;
+    padding-bottom: 55px;
+  }
+}
+
+
+/* fullscreen ? (note - wrap this and see if we can include or disclude css style blocks based on settings, and if we can run loops*/
+
+main#MainContent>div.page-width {
+    max-width: 100vw;
+    padding: 0;
+}
+@media screen and (min-width: 750px) {
+  .bg-img .feature-row__text {
+    color: white;
+  }
+  .bg-img .feature-row__text p {
+    color: white;
+  }
+}
+
+
+.content-row {
+    padding: 55px;
+}
+/* image specific css */
+/* black boot in forest, push boot to left side */
+
+.content-row-0 {
+    text-align: right;
+}
+
+.content-row-3 {
+    text-align: left;
+}
+.content-row-5 .feature-row__text {
+    color: #232323;
+}
+
+.content-row-5 .featured-row__subtext p {
+    color: #232323;
+}
+
+@media only screen and (min-width: 750px) {
+  .bg-img.bg-img-0 {
+    background-size: 140% auto;
+    background-position: right center;
+  }
+  .bg-img.bg-img-6 {
+    background-position: center bottom;
+  }
+}
+
+/* endfullscreen */
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+

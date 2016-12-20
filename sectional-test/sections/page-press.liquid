@@ -1,0 +1,171 @@
+<div class="page-width press-page">
+  {% if section.settings.title != blank %}
+    <div class="section-header text-center">
+      <h1>{{ section.settings.title | strip_html }}</h1>
+    </div>
+  {% endif %}
+
+  <div class="press-info">{{ section.settings.top-description }}</div>
+
+  {% if section.blocks.size > 0 %}
+    <ul class="press-bar">
+      {% for block in section.blocks %}
+        <li class="press-item" {{ block.shopify_attributes }}>
+
+          {% if block.settings.link != blank %}
+            <a href="{{ block.settings.link }}" class="logo-bar__link" target="_blank">
+          {% endif %}
+
+          {% comment %}{% if block.settings.image != blank %}
+            {{ block.settings.image | img_url: 'master' | img_tag: section.settings.image.alt, 'press-image' }}
+          {% else %}{{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}{% endcomment %}
+
+          <div class="press-item-hover" style="background-image: url({{ block.settings.image | img_url: 'master' }}); background-size: 100% auto; background-position: center center; background-repeat: no-repeat;">
+            <h3>{{ block.settings.title }}</h3>
+            
+            {{ block.settings.description }}
+
+          </div>
+
+          {% if block.settings.link != blank %}
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if section.blocks.size == 0 %}
+    {% include 'no-blocks' %}
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Press",
+    "class": "press-section",
+    "max_blocks": 20,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Press"
+      },
+      {
+        "type": "richtext",
+        "id": "top-description",
+        "label": "Description or contact info",
+        "default":"<p>Please visit our contact page for more information or press inquiries.</p>"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "press_item",
+        "name": "Press",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title / Publication"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link",
+            "info": "Optional"
+          },
+          {
+            "type": "richtext",
+            "id": "description",
+            "label": "Description"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Press Items",
+        "category": "Image",
+        "blocks": [
+          {
+            "type": "press_item"
+          },
+          {
+            "type": "press_item"
+          },
+          {
+            "type": "press_item"
+          },
+          {
+            "type": "press_item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+ul.press-bar {
+    display: flex;
+    flex-direction: column;
+}
+li.press-item {
+    flex: 0 1 100%;
+    text-align: center;
+}
+div.press-info p {
+  text-align: center;
+  padding-bottom: 15px;
+}
+li.press-item p {
+    text-transform: uppercase;
+}
+@media only screen and (min-width: 750px) {
+  li.press-item {
+      flex: 0 1 auto;
+      width: 33.33%;
+      padding-bottom: 35px;
+  }
+  ul.press-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+      justify-content: center;
+  }
+}
+
+li.press-item {
+  position: relative;
+  min-height: 14em;
+}
+.press-item-hover {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: rgba(0,0,0,0);
+    transition: all .4s ease;
+}
+.press-item-hover:hover {
+    color: white;
+    background-color: rgba(233,233,233,.8);
+}
+.press-item-hover p {
+  color: rgba(0,0,0,0);
+  transition: all .25s ease;
+}
+.press-item-hover:hover p {
+    color: white;
+}
+
+
+{% endstylesheet %}
