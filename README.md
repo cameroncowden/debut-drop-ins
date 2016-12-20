@@ -1,6 +1,8 @@
 # debut-drop-ins
 An open source respository for re-usable shopify sections.
 
+[Sectional Test Demo Site](https://sectional-test.myshopify.com "Demo Theme")
+
 ## Usage
 While the sections here are styled to match with the Debut theme out of the box, they can be added to any Shopify theme which supports sections (oh, wait, that's _all_ of them.)
 
@@ -34,7 +36,3 @@ It should be noted that blocks are always replicatable, so admin accessible repe
 
 As seen here:
 ![Repeatable Content Rows](https://github.com/cameroncowden/debut-drop-ins/raw/master/images/content-rows.png)
-
-
-
-
