@@ -1,0 +1,205 @@
+{% paginate blog.articles by 12 %}
+
+<div class="page-width">
+  <header class="section-header text-center">
+    <h1>{{ page_title }}</h1>
+  </header>
+</div>
+
+<div class="{% if section.settings.layout == 'list' %}blog--list-view{% endif %}">
+  <div class="border-top">
+    <div class="page-container-wide">
+      <div class="blog-layout">
+        <div class="blog-sidebar">
+          <div class="blog-sidebar-wrap">
+            <ul class="blog-sidebar-categories">
+            {% assign cats = section.settings.categories | split: ',' %}
+            <li><a href="/blogs/{{ blog.handle }}/">All</a>
+            </li>
+            {% for cat in cats %}
+            <li><a href="/blogs/{{ blog.handle }}/tagged/{{- cat | strip | handlize -}}">{{ cat | strip }}</a>
+            </li>
+            {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="blog-list">
+          {% for article in blog.articles %}
+          <div class="blog-article" style="background-image: url('{{ article | img_url: 'master' }}');">
+            
+            <div class="article-image">
+              {% if article.image %}
+              <p>
+                <a href="{{ article.url }}">
+                  {{ article | img_url: '905x600' | img_tag: article.title, 'article__list-image' }}
+                </a>
+              </p>
+              {% endif %}
+            </div>
+            <div class="article-description">
+              <div class="article-description-wrap">
+                <h2 class="article__title h3">
+                  <a href="{{ article.url }}">{{ article.title }}</a>
+                </h2>
+
+                <div class="rte">
+                  {% if article.excerpt.size > 0 %}
+                    {{ article.excerpt | strip_html }}
+                  {% else %}
+                    {{ article.content | escape | strip_html | truncatewords: 100 }}
+                  {% endif %}
+                </div>
+
+                {% if article.tags.size > 0 %}
+                  <div class="article__tags article__tags--list rte">
+                    {{ 'blogs.article.posted_in' | t }}
+                    {% for tag in article.tags %}
+                      <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                {% if section.settings.blog_show_author %}
+                  <span class="article__author">{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+                {% endif %}
+
+                {% if section.settings.blog_show_date %}
+                  <span class="article__date">
+                    {{ article.published_at | time_tag: format: 'month_day_year' }}
+                  </span>
+                {% endif %}
+                  <div class="read-more-button">
+                    <a href="{{ article.url }}" class="btn btn--secondary btn--small">
+                      {{ 'blogs.article.read_more' | t }}
+                    </a>
+                  </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if paginate.pages > 1 %}
+    {% include 'pagination' %}
+  {% endif %}
+</div>
+
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Blog pages",
+    "settings": [
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "Layout",
+        "default": "list",
+        "options": [
+          {
+            "value": "grid",
+            "label": "Grid"
+          },
+          {
+            "value": "list",
+            "label": "List"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_author",
+        "label": "Show author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_date",
+        "label": "Show date",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "categories",
+        "label": "Enter Blog Categories, comma sep",
+        "default": "People, Media, Events"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+.blog-layout {
+    display: flex;
+    flex-direction: column;
+}
+
+div.blog-sidebar {
+    background-color: lightgray;
+    padding: 15px;
+}
+.blog-sidebar-categories {
+  
+}
+.blog-list {
+  display: block;
+}
+.blog-article {
+  display: flex;
+  align-items: stretch;
+  background-size: cover;
+}
+
+.article-description-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.article-description {
+  width: 100%;
+}
+.article-description-wrap {
+  width: 100%;
+  padding: 1em;
+  background-color: rgba(255,255,255,.6);
+}
+
+ul.blog-sidebar-categories > li {
+  display: inline;
+  padding: 0px 10px;
+}
+.blog-sidebar-wrap {
+  text-align: center;
+}
+.blog-sidebar-wrap h2 {
+  display: inline;
+}
+ul.blog-sidebar-categories {
+  display: inline;
+}
+.article-image {
+  display: none;
+}
+.read-more-button a {
+  float: right;
+}
+
+/* desktop only styles */
+@media screen and (min-width: 960px) {
+  .blog-layout {
+    flex-direction: column;
+  }
+  .blog-sidebar {
+    order: 0;
+  }
+  .article-description-wrap {
+    width: 35%;
+  }
+}
+
+
+
+{% endstylesheet %}
