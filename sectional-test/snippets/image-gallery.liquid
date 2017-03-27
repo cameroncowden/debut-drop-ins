@@ -1,0 +1,17 @@
+<p> I am snippet: image-gallery.liquid </p>
+<p> I was given article id:  {{ art_id }} </p>
+
+<p> I need to either generate the gallery based on the id (global drop? / snippet gen - src?), or call a section that can loop thru blocks, which each is a gallery. </p>
+
+{% capture all_settings %}{{ settings | json }}{% endcapture %} 
+
+{{ settings | json }}
+<hr>
+{{ settings.sections | json }}
+<hr>
+
+
+
+<h2> KV: {{ kv }} </h2>
+
+

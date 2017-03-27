@@ -807,5 +807,16 @@
         "info": "Will be scaled down to 32 x 32px"
       }
     ]
+  },
+  {
+    "name": "Galleries",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "gallery-list",
+        "label": "List of Galleries",
+        "info": "Put in the names like so: AwesomeAnalogs1, DashingDigitals2"
+      }
+    ]
   }
 ]

@@ -1,0 +1,49 @@
+{% for block in section.blocks %}
+	<div {{ block.shopify_attributes }}>
+      
+      
+      <p>{{ block.settings.gallery-location }},</p>
+      
+  	</div>
+{% endfor %}
+
+
+
+{% schema %}
+  {
+    "name": "Section name",
+	"class": "image-gallery",
+    "settings": [
+		{
+			"type": "text",
+			"id": "gallery-section-title",
+			"label": "(this) image gallery"
+		}
+	],
+	"blocks": [
+		{
+			"type": "gallery",
+			"name": "Image Gallery",
+			"settings": [
+				{
+					"type": "text",
+					"id": "gallery-title",
+					"label": "title gallery?"
+				},
+				{
+					"type": "number",
+					"id":"gallery-location",
+					"label": "What is the article ID?"
+				}
+				
+			]
+		}
+	]
+  }
+{% endschema %}
+
+{% javascript %}
+{% endjavascript %}
+
+{% stylesheet %}
+{% endstylesheet %}

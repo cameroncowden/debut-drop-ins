@@ -1,33 +1,21 @@
+<p> This article ID: {{ art_id }} & {{ article.id }} </p>
+<p> ref: {{ settings.sections.image-bar.settings.article-id }} </p>
+<p> template : {{ template }} </p>
+<p>1 {{ section | json }}</p>
+<p>2 {{ settings.sections }}</p>
+<hr>
 <div class="grid grid--no-gutters image-bar image-bar--{{ section.settings.section_height }}">
-  {% case section.blocks.size %}
-    {% when 1 %}
-      {%- assign column_size = '' -%}
-      {%- assign image_width = '2000' -%}
-    {% when 2 %}
-      {%- assign column_size = 'medium-up--one-half' -%}
-      {%- assign image_width = '800' -%}
-    {% when 3 %}
-      {%- assign column_size = 'medium-up--one-third' -%}
-      {%- assign image_width = '500' -%}
-    {% else %}
-      {%- assign column_size = 'medium-up--one-quarter' -%}
-      {%- assign image_width = '400' -%}
-  {% endcase %}
-  {% case section.settings.section_height %}
-    {% when 'x-small' %}
-      {%- assign image_height = '125' -%}
-    {% when 'small' %}
-      {%- assign image_height = '300' -%}
-    {% when 'medium' %}
-      {%- assign image_height = '475' -%}
-    {% when 'large' %}
-      {%- assign image_height = '650' -%}
-    {% when 'x-large' %}
-      {%- assign image_height = '775' -%}
-  {% endcase %}
-  {% capture image_size %}{{ image_width }}x{{ image_height }}{% endcapture %}
-
+  
+  <h3 style="color:blue;">Gallery number: {% capture this_gal %}{% increment gallery_number %}{% endcapture %}{{ this_gal }}</h3>
+  
+  {% assign index = 0 %}   	
   {% for block in section.blocks %}
+  {% capture this_img %}{{ 'gal-image-' }}{{ index }}{% endcapture %}
+  {% assign index = index | plus: 1 %}
+  <br>
+  {% capture kv %}Gallery#{{ this_gal }}/ Image#{{ this_img }}{% endcapture %}
+  {{ kv }}{{ block.image.url }}
+  
     {%- assign img_url = '' -%}
     <div class="grid__item {{ column_size }}" {{ block.shopify_attributes }}>
       <style>
@@ -40,6 +28,8 @@
       {% else %}
         {%- assign img_url = '' -%}
       {% endif %}
+      
+      
       {% if block.settings.link != blank %}
         <a href="{{ block.settings.link }}" class="image-bar__item image-bar__link" {% unless img_url == blank %}style="background-image: url({{ img_url }});"{% endunless %}>
       {% elsif img_url != blank %}
@@ -47,24 +37,27 @@
       {% else %}
         <div class="image-bar__item">
       {% endif %}
-      <div class="image-bar__content{% if block.settings.cta_label != blank %} image-bar__overlay{% endif %}">
-        {% if img_url == blank %}
-          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-        {% endif %}
-
-        {% if block.settings.cta_label != blank %}
-          <div class="image-bar__text">
-            <h3 class="image-bar__caption">{{ block.settings.cta_label | escape }}</h3>
+          
+          
+          <div class="{% if block.settings.cta_label != blank %} image-bar__overlay{% endif %}">
+            {% if block.settings.cta_label != blank %}
+              <div class="image-bar__text">
+                <h3 class="image-bar__caption">{{ block.settings.cta_label | escape }}</h3>
+              </div>
+            {% endif %}
           </div>
-        {% endif %}
-      </div>
+          
+          
       {% if block.settings.link != blank %}
         </a>
       {% else %}
         </div>
       {% endif %}
+	  
     </div>
+    <p> {{ img_url }} </p>  
   {% endfor %}
+ 
 </div>
 
 {% if section.blocks.size == 0 %}
@@ -74,13 +67,13 @@
 {% schema %}
 {
   "name": "Gallery",
-  "class": "index-section index-section--flush",
-  "max_blocks": 4,
+  "class": "image-gallery-thumbs",
+  "max_blocks": 8,
   "settings": [
     {
       "type": "select",
       "id": "section_height",
-      "label": "Section height",
+      "label": "Gallery height",
       "default": "medium",
       "options": [
         {
@@ -104,7 +97,12 @@
           "value": "x-large"
         }
       ]
-    }
+    },
+  	{
+  	  "type":"text",
+  	  "id": "article-id",
+   	  "label": "show only on article with id?"
+  	}
   ],
   "blocks": [
     {

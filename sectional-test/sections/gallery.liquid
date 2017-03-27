@@ -1,0 +1,24 @@
+<h1>{{ section.settings.gallery }}</h1>
+<p> Naive method: </p>
+<ul class="gallery" >
+  {% for block in section.blocks %}
+  <li class="gallery-image" {{ block.shopify_attributes }}>
+    <p>Block Number: {% increment var %}</p>
+  
+  </li>
+  {% endfor %}
+</ul>
+
+{% schema %}
+  {
+    "name": "Gallery",
+    "settings": [{ "type": "text", "id":"gallery", "label": "Global Gallery Title"  }],
+	"blocks": [{ "type":"image", "name":"Gallery Image", "settings": [{ "type":"image_picker", "id":"image","label":"Image" }] }]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

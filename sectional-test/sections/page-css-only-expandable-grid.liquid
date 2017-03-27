@@ -1,0 +1,152 @@
+<section class="artists-grid-layout">
+  {% for block in section.blocks %}
+      <input type="radio" class="hidden-input" name="artist-viewer" id="toggle-artist-{{ block.settings.name | handleize }}" />
+      <label for="toggle-artist-{{ block.settings.name | handleize }}" class="artist-item item-{% increment count %}" {{ block.shopify_attributes }}>
+        
+        <h2>{{ block.settings.name }}</h2>
+        
+      </label>
+  	  <div id="artist-{{ block.settings.name | handleize }}" class="artist-profile">
+          {{ block.settings.name }}, {{ block.settings.bio }} - {{ block.settings.quote }}
+      </div>
+  {% endfor %}
+</section>
+
+<style>
+  h1.title, h2.subtitle {
+  	font-family: "franklin-gothic-URW", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    color: white;
+  }
+  .artists-grid-layout {
+  	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /*max-width: 1200px;*/
+    margin: 0 auto;
+    background: whitesmoke;
+  }
+  .artist-item {
+  	flex: 0 0 30%;
+    position: relative;
+    min-height: 350px;
+    margin: 1rem;
+    padding: 1rem;
+    background: lightblue;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-align: center;
+  }
+  .artist-item h2 {
+  	color: white;
+    font-family:  "franklin-gothic-URW", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+	top: 50%;
+    position: absolute;
+    width: 100%;
+    left: 0;
+  }
+  .artist-profile {
+  	display: block;
+    width: 100%;
+    height: 100%;
+	background: blue;
+    height: 0;
+    opacity: 0;
+    transition: all 0s ease;
+    visibility: hidden;
+    order: -1;
+    color: white;
+    font-size: 1rem;
+    line-height: 1rem;
+    font-family:  "franklin-gothic-URW", Helvetica, Arial, sans-serif;
+  }
+  .hidden-input {
+  	display: none;
+  }
+  .artist-profile {
+  	/*display: none;*/
+    
+  }
+  {% for block in section.blocks %}
+  {% capture this_count %}{% increment counter %}{% endcapture %}
+    #toggle-artist-{{ block.settings.name | handleize }}:checked ~ #artist-{{ block.settings.name | handleize }} {
+      display: block;
+      height: auto;
+      opacity: 1;
+      flex: 1 0 90%;
+      order: calc( 3 - {{ this_count | modulo: 3}} + {{ this_count }} );
+      margin: 1rem;
+      padding: 1rem;
+      visibility: visible;
+      transition: all .5s ease;
+    }
+  	#toggle-artist-{{ block.settings.name | handleize }}:checked ~ label[for="toggle-artist-{{ block.settings.name | handleize }}"] {
+  	  /*flex: 1 0 100%;*/
+    }
+  
+  .item-{{ this_count }}{
+    order: {{ this_count }};
+  }
+  
+  #toggle-artist-{{ block.settings.name | handleize }}:checked ~ #artist-{{ block.settings.name | handleize }} {
+  
+  }
+  label[for="toggle-artist-{{ block.settings.name | handleize }}"] {
+    background-image: url('{{ block.settings.image | img_url: '400x' }}');
+  }
+  
+  {% endfor %}
+  
+</style>
+
+
+
+{% schema %}
+  {
+    "name": "Artists Page",
+    "settings": [],
+	"blocks" : 
+		[
+			{
+				"type": "artist",
+				"name": "Artist Listing",
+				"settings": [
+					{
+						"type" : "text",
+						"id" : "name",
+						"label" : "Name of Artist"
+					},
+					{
+						"type" : "image_picker",
+						"id" : "image",
+						"label" : "Image"
+					},
+					{
+						"type" : "richtext",
+						"id" : "bio",
+						"label" : "Bio / Description",
+						"default": "<p>Bio of the artist goes here.</p>"
+					},
+					{
+						"type":"richtext",
+						"id":"quote",
+						"label":"Artist's Quote about VV"
+					},
+					{
+						"type": "url",
+						"id": "video",
+						"label": "URL for Youtube or Vimeo video"
+					}
+				]
+			}
+		]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,27 +1,24 @@
 {
   "current": {
-    "color_text": "#3d4246",
-    "color_body_text": "#788188",
-    "color_sale_text": "#7796A8",
-    "color_borders": "#e8e9eb",
-    "color_button": "#7796A8",
+    "color_text": "#000000",
+    "color_body_text": "#000000",
+    "color_sale_text": "#ff0000",
+    "color_borders": "#000000",
+    "color_button": "#000000",
     "color_button_text": "#fff",
     "color_small_button": "#fff",
-    "color_small_button_text": "#3d4246",
+    "color_small_button_text": "#000000",
     "color_text_field": "#fff",
     "color_text_field_text": "#000",
     "color_image_overlay_text": "#fff",
-    "color_image_overlay": "#3d4246",
-    "image_overlay_opacity": "0.25",
-    "color_body_bg": "#fff",
+    "color_image_overlay": "#000000",
+    "image_overlay_opacity": "0.5",
+    "color_body_bg": "#fff4f4",
     "type_header_family": "Google_Work+Sans_600_sans",
     "type_header_base_size": "26px",
     "type_base_family": "Google_Work+Sans_400_sans",
     "type_base_size": "16px",
     "type_bold_product_titles": false,
-    "vendor_enable": true,
-    "blog_show_author": false,
-    "blog_show_date": true,
     "share_facebook": true,
     "share_twitter": true,
     "share_pinterest": true,
@@ -34,17 +31,14 @@
     "social_youtube_link": "",
     "social_vimeo_link": "",
     "favicon": "",
-    "checkout_use_header_image": false,
+    "gallery-list": "<p>gallery-test-1,<\/p>\r\n<p>gallery-test-2<\/p>",
     "checkout_header_image": "",
-    "checkout_logo": "",
     "checkout_logo_image": "",
     "checkout_logo_position": "left",
     "checkout_logo_size": "medium",
-    "checkout_use_body_background_image": false,
     "checkout_body_background_image": "",
     "checkout_body_background_color": "#fff",
     "checkout_input_background_color_mode": "white",
-    "checkout_use_sidebar_background_image": false,
     "checkout_sidebar_background_image": "",
     "checkout_sidebar_background_color": "#fafafa",
     "checkout_heading_font": "Helvetica Neue",
@@ -52,6 +46,13 @@
     "checkout_accent_color": "#1990C6",
     "checkout_button_color": "#1990C6",
     "checkout_error_color": "#ff6d6d",
+    "checkout_use_header_image": false,
+    "checkout_logo": "",
+    "checkout_use_body_background_image": false,
+    "checkout_use_sidebar_background_image": false,
+    "vendor_enable": true,
+    "blog_show_author": false,
+    "blog_show_date": true,
     "sections": {
       "header": {
         "type": "header",
@@ -61,10 +62,33 @@
           "logo_max_width": "100",
           "main_linklist": "main-menu",
           "message": true,
-          "message_text": "Announce something here",
+          "message_text": "Demo Site for Customizations to the Debut Theme",
           "message_link": "",
-          "color_bg": "#7796A8",
+          "color_bg": "#ff0000",
           "color_text": "#fff"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "footer_linklist": "footer",
+          "footer_linklist_two": "",
+          "footer_newsletter_enable": false,
+          "show_payment_icons": false,
+          "show_powered_by": true
+        }
+      },
+      "1476907275518": {
+        "type": "hero",
+        "settings": {
+          "image": "",
+          "alignment": "bottom",
+          "title": "DEBUT DROP INS",
+          "text": "<p>DEMO THEME SHOWCASING REUSABLE &amp; OPEN SOURCE SECTIONS<\/p>",
+          "hero_size": "large",
+          "text_size": "large",
+          "button_label": "",
+          "button_link": ""
         }
       },
       "hero": {
@@ -72,86 +96,540 @@
         "settings": {
           "image": "",
           "alignment": "center",
-          "title": "Image with text overlay",
-          "text": "<p>Use overlay text to give your customers insight into your brand. Select imagery and text that relates to your style and story.<\/p>",
+          "title": "Image with text overlay2",
+          "text": "<p>THIS IS ON THE CUSTOM PAGE, NOT HOMEPAGE.<\/p>",
           "hero_size": "medium",
           "text_size": "large",
           "button_label": "",
           "button_link": ""
         }
       },
-      "slideshow": {
-        "type": "slideshow",
+      "map": {
+        "type": "map",
+        "settings": {
+          "map_title": "Our store",
+          "address": "<p>123 Fake St.<br>Toronto, Canada<\/p><p>Mon - Fri, 10am - 9pm<br>Saturday, 11am - 9pm<br>Sunday, 11am - 5pm<\/p>",
+          "map_address": "80 Spadina Ave, Toronto",
+          "api_key": "",
+          "show_button": true
+        }
+      },
+      "blog-template": {
+        "type": "blog-template",
+        "settings": {
+          "layout": "list",
+          "blog_show_author": true,
+          "blog_show_date": true
+        }
+      },
+      "article-template": {
+        "type": "article-template",
+        "settings": {
+          "blog_show_author": true,
+          "blog_show_date": true,
+          "show_share_buttons": true
+        }
+      },
+      "galleries-list": {
+        "type": "galleries-list",
         "blocks": {
-          "slideshow-0": {
-            "type": "image",
+          "1481226333517": {
+            "type": "gallery",
             "settings": {
-              "image": "",
-              "alignment": "top",
-              "title": "Slideshow",
-              "subheading": "Tell your brand's story through video and images",
-              "link": ""
+              "gallery-title": "Post1",
+              "gallery-location": 196399568
             }
           },
-          "slideshow-1": {
-            "type": "image",
+          "1481226363413": {
+            "type": "gallery",
             "settings": {
-              "image": "",
-              "alignment": "top",
-              "title": "Slideshow",
-              "subheading": "Tell your brand's story through video and images",
-              "link": ""
+              "gallery-title": "gallery2",
+              "gallery-location": 196399824
+            }
+          },
+          "1481258836305": {
+            "type": "gallery",
+            "settings": {
+              "gallery-title": "3",
+              "gallery-location": 196399824
+            }
+          },
+          "1481259145853": {
+            "type": "gallery",
+            "settings": {
+              "gallery-title": "",
+              "gallery-location": 1234
             }
           }
         },
         "block_order": [
-          "slideshow-0",
-          "slideshow-1"
+          "1481226333517",
+          "1481226363413",
+          "1481258836305",
+          "1481259145853"
         ],
         "settings": {
-          "autoplay": true,
-          "autoplay_speed": "7000",
-          "slideshow_height": "small",
-          "text_size": "medium"
+          "gallery-section-title": "Testing Galleries"
         }
       },
-      "featured-collections": {
-        "type": "collection",
+      "gallery": {
+        "type": "gallery",
+        "blocks": {
+          "1481226558318": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/footwear-plus-helm-boots.jpg"
+            }
+          },
+          "1481226580559": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/garden-and-gun-helm-boots.jpg"
+            }
+          },
+          "1481226590460": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/gear-patrol-helm-boots.jpg"
+            }
+          }
+        },
+        "block_order": [
+          "1481226558318",
+          "1481226580559",
+          "1481226590460"
+        ],
         "settings": {
-          "title": "Featured collection",
-          "collection": "frontpage",
-          "grid": "3",
-          "rows": "2",
-          "show_view_all": false
+          "gallery": "Test"
         }
       },
-      "feature-row": {
+      "1481226851955": {
+        "type": "image-bar",
+        "blocks": {
+          "1481226851955-0": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/gear-patrol-helm-boots.jpg",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481226851955-1": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/Screen_Shot_2014-11-11_at_9.42.59_AM.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481226851955-2": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/helm-boots-maine-manufacturing-factory.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          }
+        },
+        "block_order": [
+          "1481226851955-0",
+          "1481226851955-1",
+          "1481226851955-2"
+        ],
+        "settings": {
+          "section_height": "medium",
+          "article-id": "196399568"
+        }
+      },
+      "1481226882734": {
+        "type": "image-bar",
+        "blocks": {
+          "1481226882734-0": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/boots-factory-main-helm.jpg",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481226882734-1": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/instagram_nov70.jpg",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481226882734-2": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/footwear-plus-helm-boots.jpg",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          }
+        },
+        "block_order": [
+          "1481226882734-0",
+          "1481226882734-1",
+          "1481226882734-2"
+        ],
+        "settings": {
+          "section_height": "medium",
+          "article-id": "1234"
+        }
+      },
+      "image-bar": {
+        "type": "image-bar",
+        "blocks": {
+          "1481227447789": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/helm-boots-maine-manufacturing-factory.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481227461836": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/boots-factory-main-helm.jpg",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481230256764": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/boots-factory-main-helm.jpg",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481230268601": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/logo.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          }
+        },
+        "block_order": [
+          "1481227447789",
+          "1481227461836",
+          "1481230256764",
+          "1481230268601"
+        ],
+        "settings": {
+          "section_height": "medium",
+          "article-id": "196399568"
+        }
+      },
+      "1481258787290": {
+        "type": "image-bar",
+        "blocks": {
+          "1481258787290-0": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/helm-boots-maine-manufacturing-factory.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481258787290-1": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/helm-boots-maine-manufacturing-factory.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          },
+          "1481258787290-2": {
+            "type": "image",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/helm-boots-maine-manufacturing-factory.png",
+              "alignment": "center",
+              "link": "",
+              "cta_label": ""
+            }
+          }
+        },
+        "block_order": [
+          "1481258787290-0",
+          "1481258787290-1",
+          "1481258787290-2"
+        ],
+        "settings": {
+          "section_height": "medium",
+          "article-id": "196399824"
+        }
+      },
+      "1482239582728": {
+        "type": "article-template",
+        "settings": {
+          "blog_show_author": true,
+          "blog_show_date": false,
+          "show_share_buttons": true
+        }
+      },
+      "page-press": {
+        "type": "page-press",
+        "blocks": {
+          "1482262443396": {
+            "type": "press_item",
+            "settings": {
+              "title": "Press item 1",
+              "image": "shopify:\/\/shop_images\/rbcxo9au-u-robert-lukeman.jpg",
+              "link": "shopify:\/\/pages\/press-page",
+              "description": "<p>Description number 1 Lorem Ipsum.<\/p>"
+            }
+          },
+          "1482262689977": {
+            "type": "press_item",
+            "settings": {
+              "title": "Press Item 2",
+              "image": "shopify:\/\/shop_images\/4zsmwi2k9iy-cameron-kirby.jpg",
+              "link": "shopify:\/\/pages\/press-page",
+              "description": "<p>Description Number 2 Lorem<\/p>"
+            }
+          },
+          "1482262713813": {
+            "type": "press_item",
+            "settings": {
+              "title": "Press Item 3",
+              "image": "shopify:\/\/shop_images\/12dxkdujs40-violeta-pencheva.jpg",
+              "link": "shopify:\/\/pages\/press-page",
+              "description": "<p>Press Item number 3 description!<\/p>"
+            }
+          },
+          "1482262738279": {
+            "type": "press_item",
+            "settings": {
+              "title": "Press Item 4",
+              "image": "shopify:\/\/shop_images\/pexels-photo-248159.jpeg",
+              "link": "shopify:\/\/pages\/press-page",
+              "description": "<p>Press Item Number 3 Description<\/p>"
+            }
+          }
+        },
+        "block_order": [
+          "1482262443396",
+          "1482262689977",
+          "1482262713813",
+          "1482262738279"
+        ],
+        "settings": {
+          "title": "Press",
+          "top-description": "<p>Please visit our contact page for more information or press inquiries.<\/p>"
+        }
+      },
+      "page-film": {
+        "type": "page-film",
+        "blocks": {
+          "1482263904898": {
+            "type": "film_item",
+            "settings": {
+              "title": "AWAKE",
+              "link": "https:\/\/player.vimeo.com\/video\/193765287",
+              "description": "<p>These have been some of the best, worst and most important parts of my life for the last four years. I've made lifelong friendships, seen more than I ever thought existed and have had more bad luck than I knew was possible.&nbsp;<\/p>"
+            }
+          },
+          "1482263984988": {
+            "type": "film_item",
+            "settings": {
+              "title": "12 Days of XMAS",
+              "link": "https:\/\/player.vimeo.com\/video\/196277011",
+              "description": "<p>Written, Directed, Animated &amp; Produced by Anomaly:<br>Narrator - Phoebe Waller-Bridge<br>Writer - Craig Ainsley<br>Directors - Ben White &amp; Craig Ainsley<br>Assistant head of family planning &ndash; Oli Beale<br><br><\/p>"
+            }
+          },
+          "1482264051038": {
+            "type": "film_item",
+            "settings": {
+              "title": "MEMORIA",
+              "link": "https:\/\/player.vimeo.com\/video\/193892814",
+              "description": "<p>Cast:<br>Tobias Kersloot<br>Bob Stoop<br>Mirte Van der Zee<\/p>"
+            }
+          },
+          "1482264108261": {
+            "type": "film_item",
+            "settings": {
+              "title": "ICARUS",
+              "link": "https:\/\/player.vimeo.com\/video\/195592067",
+              "description": "<p>&ldquo;Icarus&rdquo; is my non-narrative short drone film and really a homage to an awesome piece of technology, Phantom 3 Pro, that travels with me for the past 2 years to many many locations.<\/p>"
+            }
+          }
+        },
+        "block_order": [
+          "1482263904898",
+          "1482263984988",
+          "1482264051038",
+          "1482264108261"
+        ],
+        "settings": {
+          "title": "Videos"
+        }
+      },
+      "page-content-rows-with-text": {
+        "type": "page-content-rows-with-text",
+        "blocks": {
+          "1482264288941": {
+            "type": "content-row",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/rbcxo9au-u-robert-lukeman.jpg",
+              "layout": "left",
+              "title": "Focus Left \/ Text Right",
+              "text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+              "subtext": "<p>This is an optional secondary text field.<\/p>",
+              "button_label": "",
+              "button_link": ""
+            }
+          },
+          "1482264298020": {
+            "type": "content-row",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/4zsmwi2k9iy-cameron-kirby.jpg",
+              "layout": "right",
+              "title": "Focus Right, Text Left",
+              "text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+              "subtext": "<p>This is an optional secondary text field.<\/p>",
+              "button_label": "",
+              "button_link": ""
+            }
+          },
+          "1482264303455": {
+            "type": "content-row",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/12dxkdujs40-violeta-pencheva.jpg",
+              "layout": "center",
+              "title": "Image with text",
+              "text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+              "subtext": "<p>This is an optional secondary text field.<\/p>",
+              "button_label": "",
+              "button_link": ""
+            }
+          },
+          "1482264309884": {
+            "type": "content-row",
+            "settings": {
+              "image": "shopify:\/\/shop_images\/pexels-photo-248159.jpeg",
+              "layout": "right",
+              "title": "Image with text & Button",
+              "text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+              "subtext": "<p>This is an optional secondary text field.<\/p>",
+              "button_label": "Button",
+              "button_link": "shopify:\/\/pages\/content-rows-with-text-page"
+            }
+          }
+        },
+        "block_order": [
+          "1482264288941",
+          "1482264298020",
+          "1482264303455",
+          "1482264309884"
+        ],
+        "settings": {
+          "section-title": "Our Story"
+        }
+      },
+      "page-css-only-expandable-grid": {
+        "type": "page-css-only-expandable-grid",
+        "blocks": {
+          "1490629596123": {
+            "type": "artist",
+            "settings": {
+              "name": "Test 1",
+              "image": "shopify:\/\/shop_images\/pexels-photo-248159.jpeg",
+              "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.&nbsp;<\/p>",
+              "quote": "<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<\/p>",
+              "video": ""
+            }
+          },
+          "1490629613590": {
+            "type": "artist",
+            "settings": {
+              "name": "Test 2",
+              "image": "shopify:\/\/shop_images\/12dxkdujs40-violeta-pencheva.jpg",
+              "bio": "<p>Bio of the artist goes here.<\/p>",
+              "quote": "<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<\/p>",
+              "video": ""
+            }
+          },
+          "1490629622812": {
+            "type": "artist",
+            "settings": {
+              "name": "Test 3",
+              "image": "shopify:\/\/shop_images\/4zsmwi2k9iy-cameron-kirby.jpg",
+              "bio": "<p>Bio of the artist goes here.<\/p>",
+              "quote": "",
+              "video": ""
+            }
+          },
+          "1490629630380": {
+            "type": "artist",
+            "settings": {
+              "name": "Test 4",
+              "image": "shopify:\/\/shop_images\/rbcxo9au-u-robert-lukeman.jpg",
+              "bio": "<p>Bio of the artist goes here.<\/p>",
+              "quote": "<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<\/p>",
+              "video": ""
+            }
+          }
+        },
+        "block_order": [
+          "1490629596123",
+          "1490629613590",
+          "1490629622812",
+          "1490629630380"
+        ],
+        "settings": {
+        }
+      },
+      "blog-template-full-width-images": {
+        "type": "blog-template-full-width-images",
+        "settings": {
+          "layout": "list",
+          "blog_show_author": true,
+          "blog_show_date": true,
+          "categories": "People, Media, Events"
+        }
+      },
+      "meet-the-team": {
+        "type": "meet-the-team",
+        "settings": {
+        }
+      },
+      "1490630041372": {
         "type": "feature-row",
         "settings": {
-          "image": "",
+          "image": "shopify:\/\/shop_images\/dqxiw7ncb9q-ng.jpg",
           "layout": "left",
-          "title": "Image with text",
-          "text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-          "button_label": "",
-          "button_link": ""
-        }
-      },
-      "footer": {
-        "type": "footer",
-        "settings": {
-          "footer_linklist": "footer",
-          "footer_linklist_two": "main-menu",
-          "footer_newsletter_enable": true,
-          "show_payment_icons": true,
-          "show_powered_by": true
+          "title": "What's this?",
+          "text": "<p>This is a sandbox and demo site for free, open-source, modular drop-ins for the shopify Debut Theme.<\/p>\r\n<p>Check out the navigation for the front-end results for various sections. The source code can be found on github.&nbsp;<\/p>\r\n<p>We try to keep everything up to date, but if anything is missing please let us know!<\/p>",
+          "button_label": "GitHub",
+          "button_link": "https:\/\/github.com\/cameroncowden\/debut-drop-ins"
         }
       }
     },
     "content_for_index": [
-      "hero",
-      "featured-collections",
-      "slideshow",
-      "feature-row"
+      "1476907275518",
+      "1490630041372",
+      "1481226882734",
+      "1481226851955",
+      "1481258787290",
+      "1482239582728"
     ]
   },
   "presets": {

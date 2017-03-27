@@ -1,0 +1,27 @@
+<div class="page-width">
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div>
+
+      <div class="rte">
+        {{ page.content }}
+      </div>
+      {% unless page.metafield.count %}
+      	{% assign page.metafield.count = 0 %}
+      {% endunless %}
+      {% assign page.metafield.count = page.metafields.count | plus: 1 %}
+      {{ page.metafields.counter }}
+      {{ test.counter }}
+
+	  {{ page.metafields.test.counter }}
+      
+      {% assign page.metafields.test.counter = page.metafields.test.counter | plus: 1 %}
+      
+      {{ page.metafields.test.counter }}
+
+    </div>
+  </div>
+</div>
+
