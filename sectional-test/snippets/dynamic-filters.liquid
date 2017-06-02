@@ -1,0 +1,48 @@
+{% for tag in collection.all_tags %}
+    	{% if tag contains 'cf' and tag contains '|' %}
+    		{% assign url = '' %}
+  			{% assign status = '' %}
+			{% assign data = tag | split: 'cf-' %}
+			<!-- data[0] ={{ data[0] }}, data[1] = {{ data[1] }} == cat | val -->
+			{% assign kv = data[1] | split: '|' %}
+			<!-- kv[0] = {{ kv[0] }}, kv[1] = {{ kv[1] }} -->
+			{% assign cat = kv[0] | strip | handleize %}
+			{% assign val = kv[1] | strip | handleize %}
+			{% assign friendly = kv[1] | strip | capitalize %}
+
+    		{% unless current_tags %}
+    			{% comment %} unless we're already in a filtered view, provide a link to filter by that tag. {% endcomment %}
+    			{% assign url = friendly | link_to_tag: tag | replace: tag, friendly %}
+    		{% else %}
+  				{% unless current_tags contains tag %}
+    				
+  					{% if collection.tags contains tag %}
+  					
+  						{% unless tag contains 'color' %}
+  							{% assign url = friendly | link_to_add_tag: tag | replace: tag, friendly%}
+  							{% assign status = 'available' %}
+  						{% else %}
+  							{% assign url = friendly | link_to_tag: tag | replace: tag, friendly%}
+  							{% assign status = 'unique' %}
+  						{% endunless %}
+  					{% else %}
+                      {% assign status = 'unavailable' %}
+                      {% assign url = friendly | link_to_tag: tag | replace: tag, friendly %}
+  					{% endif %}
+  				{% else %}
+  					{% assign url = friendly | link_to_remove_tag: tag | replace: tag, friendly %}
+  					{% assign status = 'selected' %}
+  				{% endunless %}
+    		{% endunless %}
+
+    		{% unless kv[0] == current_filter %}
+    			{% assign current_filter = kv[0] %}
+  				{% unless forloop.first %}</ul>{% endunless %}<h6 class="dynamic-filter-headers filter-menu-{{ kv[0] }}"> {% if kv[0] == 'unique' %}<a href="{{ collection.url }}?view={{ kv[0] }}">By {{ kv[0] }}</a>{% else %}View by {{ kv[0] | capitalize }}{% endif %} </h6><ul class="dynamic-filters no-bullets filter-menu-{{ kv[0] }}">
+    		{% endunless %}
+  	  		{% unless status == 'unavailable' %}
+  			<li class="tag-filter {{ status }}">{{url}}{% if status == 'selected' %}<span class="remove-filter"></span>{% elsif status == 'available' %}<span class="add-filter">+</span>{% elsif status == 'unavailable' %}<span class="no-products">(0)</span>{% endif %}</li>
+  			{% else %}
+			<li class="tag-filter {{ status }}">{{url}}</li>
+			{% endunless %}
+    	{% endif %}
+    {% endfor %}

@@ -1,0 +1,197 @@
+<script async src="https://www.youtube.com/iframe_api"></script>
+
+<div class="video-frame">
+  <div id="youtubeVideoSlide"></div>
+  <div class="overlay">
+  	<div class="inner-text">
+      <h1>{{ section.settings.title }}</h1>
+      <h2 class="like-p">{{ section.settings.subheading }}</h2>
+      <a href="{{ section.settings.link }}"><div class="hero-button">{{ section.settings.button-text }}</div></a>
+    </div>
+  </div>
+  <div class="down_arrow">
+    <i class="fa fa-angle-down"></i>
+  </div>
+</div>
+
+<script>
+  function onYouTubeIframeAPIReady() {
+        var player;
+        player = new YT.Player('youtubeVideoSlide', {
+          videoId: '{{ section.settings.video }}',
+          width: 1000,
+          height: 560,
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            showinfo: 0,
+            modestbranding: 1,
+            fs: 0,
+            cc_load_policy: 0,
+            iv_load_policy: 3,
+            autohide: 0
+          },
+          events: {
+            'onReady': function(e) {
+              e.target.mute();
+              //alert("click to play");
+            },
+            'onStateChange': function(e) {
+              if (e.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+                player.mute();
+              }
+            }
+          }
+        });
+      }
+      
+</script>
+<style>
+  .video-frame {
+  	position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    background-image: url('{{ section.settings.image | img_url: 'master' }}');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+  }
+  .video-frame iframe {
+    position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+  }
+  .video-frame .overlay {
+  	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+    background-color: rgba(4, 56, 74,{{ section.settings.opacity }});
+  }
+  .video-frame .inner-text {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: {{ section.settings.text-color }};
+  }
+  .video-frame .inner-text h1 {
+    font-weight: 400;
+    margin: 5px 0;
+    font-size: 45px;
+  }
+  
+  .video-frame .hero-button {
+    max-width: 180px;
+    margin: 0 auto;
+  }
+
+  .overlay, .inner-text {
+  	pointer-events: none;
+  }
+  .video-frame .hero-button {
+  	pointer-events: initial;
+  }
+
+  @media screen and (max-width: 768px) {
+    .video-frame iframe {
+      display: none;
+    }
+    .video-frame .inner-text h1 {
+      font-size: 24px;
+    }
+    .video-frame h2.like-p {
+        margin: 0;
+    }
+
+    .video-frame .down_arrow {
+        display: none;
+    }
+
+    .video-frame .hero-button {
+        font-size: 14px;
+        line-height: 16px;
+        padding: 5px 15px 4px;
+    }
+  }
+</style>
+{% schema %}
+  {
+    "name": "Hero Video",
+    "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image for fallback/loading"
+        },
+		{
+			"type":"text",
+			"id":"video",
+			"label":"Video ID for youtube video",
+			"info":"Format "
+		},
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Slideshow"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Tell your brand's story through video and images"
+        },
+		{
+		  "type": "color",
+			"id": "text-color",
+			"label":"Text Color",
+			"default": "#ffffff"
+		},
+		{
+		    "type": "text",
+			"id": "opacity",
+			"label":"Overlay opacity",
+			"info":"Enter values from 0 to 1, format like 0.2, 0.4 etc",
+			"default": "0.3"
+		},
+ 		{
+          "type": "text",
+          "id": "button-text",
+          "label": "Button Text (controls show/hide)",
+          "default": "Buy Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Slide link"
+        },
+		{
+			"type":"checkbox",
+			"id":"new-window",
+			"label": "Open link in a new window?"
+		}
+      ],
+	"presets": [
+		{
+			"name":"Hero Video",
+			"category":"Video"
+		}
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

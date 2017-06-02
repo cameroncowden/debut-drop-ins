@@ -95,6 +95,12 @@
     <main class="main-content" id="MainContent" role="main">
       {{ content_for_layout }}
     </main>
+    <aside>
+      Product tag checking:
+      {% if product and product.tags contains 'optimize' %}
+      	Optimizing this page!
+      {% endif %}
+    </aside>
 
     {% section 'footer' %}
     {% comment %}
