@@ -1,4 +1,3 @@
-images/*.png
 *.yml
 sectional-test/config/settings_data.json
 sectional-test/config.yml
