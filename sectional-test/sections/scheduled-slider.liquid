@@ -1,0 +1,541 @@
+{% assign year_month_day = 'now' | date: "%Y%m%d" %} 
+{% assign hour_minute = 'now' | date: "%H%M" %}
+<div class="slideshow slideshow-{{ section.id }} section-standard no-border" data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+  <div class="{% if section.settings.full_width %}contain-full-width{% else %}contain-site-width{% endif %} no-padding">
+    <div class="wrapper">
+      {% if section.settings.autoplay %}
+        {% assign autoplay = section.settings.autoplay_speed %}
+      {% else %}
+        {% assign autoplay = false %}
+      {% endif %}
+      <div class="slideshow-carousel"
+        data-slide-count="{{ section.blocks.size }}"
+        data-flickity-options='{
+          "imagesLoaded": true,
+          "lazyLoad": 0,
+          "adaptiveHeight": true,
+          "autoPlay": {{ autoplay }},
+          "wrapAround": true,
+          "prevNextButtons": {{ section.settings.show_arrows }},
+          "pageDots": {{ section.settings.show_dots }}
+        }'>
+        {% for block in section.blocks %} 
+          <!-- BLOCKY -->
+          
+          {% if block.settings.date_start != "" %}
+            <!-- DATE START NOT BLANK -->
+          	{% assign show_slide = false %}
+          	{% assign schedule_start = block.settings.date_start %}
+          	{% assign start = schedule_start | split: '@' %}
+          		
+          	
+              {% if block.settings.date_end != "" %}
+              <!-- DATE END NOT BLANK -->
+                  {% assign schedule_end = block.settings.date_end %}
+                  {% assign end = schedule_end | split: '@' %}
+              {% endif %}
+    	
+          
+              {% unless end[0] < year_month_day %}
+                {% if end[0] == year_month_day and end[1] < hour_minute %}{% break %}{% endif %}
+                {% if start[0] < year_month_day or start[0] == year_month_day %}
+                  {% if start[0] == year_month_day %}
+          			{% if start[1] < hour_minute %}
+                    		{% assign show_slide = true %}
+          			{% endif %}
+          		{% else %}
+          			{% assign show_slide = true %}
+    			{% endif %}
+                {% endif %}
+              {% endunless %}
+          
+          	{% if show_slide == false %}
+          		{% continue %}
+          	{% endif %}
+
+          {% endif %}
+          
+          {% if block.settings.hide_slide == true %}
+            {% continue %}
+          {% endif %}
+          
+
+          <div id="block-{{ block.id }}" class="slide__item slide__item-{{ block.type }}" data-slide-index="{{ forloop.index0 }}" {% if block.type == 'video' %}data-video-id="{{ block.settings.video_url.id }}"{% endif %} {{ block.shopify_attributes }}>
+            {% comment %}
+              Slide text content
+            {% endcomment %}
+            <div class="slide__item-content {{ block.settings.vertical_alignment }} {{ block.settings.horizontal_alignment }}">
+              <div class="content-box">
+                <div class="outer-wrapper">
+                  <div class="inner-wrapper">
+                    {% if block.settings.title != blank %}
+                      <div class="content-contain">
+                        <h2>{{ block.settings.title }}</h2>
+                      </div>
+                    {% endif %}
+                    {% if block.settings.text != blank %}
+                      <div class="rte content-contain">
+                        {{ block.settings.text }}
+                      </div>
+                    {% endif %}
+                    {% if block.settings.button_link != blank and block.settings.button_label != blank %}
+                      <a href="{{ block.settings.button_link }}" class="button">{{ block.settings.button_label | escape }}</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {% comment %}
+              Slide image and link
+            {% endcomment %}
+            {% if block.settings.link != blank %}
+              <a href="{{ block.settings.link }}" class="slide__item-image">
+            {% else %}
+              <div class="slide__item-image">
+            {% endif %}
+
+            {% if block.settings.image != blank %}
+              {% comment %}
+                Lazy load all images except first
+              {% endcomment %}
+               
+              {% if block.settings.mobile_image != blank %}  
+                {% if forloop.first %}
+                  <img src="{{ block.settings.image | img_url: '1180x' }}" srcset="{{ block.settings.image | img_url: '2400x' }} 2400w, {{ block.settings.image | img_url: '1180x' }} 1180w {% if block.settings.mobile_image != blank %}, {{ block.settings.mobile_image | img_url: '800x' }} 800w{% endif %}" sizes="100vw" alt="{{ block.settings.image.alt | escape }}" />
+                  {% comment %}<img src="{{ block.settings.image | img_url: '800x' }}" {% if block.settings.mobile_image != blank %} srcset="{{ block.settings.mobile_image | img_url: '800x' }} 700w, {{ block.settings.image | img_url: '1100x' }} 1200w, {{ block.settings.image | img_url: '2000x' }} 2000w" {% endif %} alt="{{ block.settings.image.alt | escape }}" />{% endcomment %}
+                {% else %}
+                  <img src="{{ block.settings.image | img_url: '1180x' }}" srcset="{{ block.settings.image | img_url: '2400x' }} 2400w, {{ block.settings.image | img_url: '1180x' }} 1180w {% if block.settings.mobile_image != blank %}, {{ block.settings.mobile_image | img_url: '800x' }} 800w{% endif %}" sizes="100vw" alt="{{ block.settings.image.alt | escape }}" />
+                  {% comment %}<img data-flickity-lazyload="{{ block.settings.image | img_url: '800x' }}" {% if block.settings.mobile_image != blank %} srcset="{{ block.settings.mobile_image | img_url: '800x' }} 700w, {{ block.settings.image | img_url: '1100x' }} 1200w, {{ block.settings.image | img_url: '2000x' }} 2000w" {% endif %} alt="{{ block.settings.image.alt | escape }}" />{% endcomment %}
+                {% endif %}
+              {% else %}
+                <img src="{{ block.settings.image | img_url: '1180x' }}" alt="{{ block.settings.image.alt | escape }}" />
+              {% endif %}
+            {% else %}
+              {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+              {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+
+            {% if block.settings.link != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+
+            <style media="screen">
+              #block-{{ block.id }} .slide__item-content {
+                background-color: {{ block.settings.color_overlay | hex_to_rgba: block.settings.color_overlay_alpha }};
+              }
+              #block-{{ block.id }} h2,
+              #block-{{ block.id }} .rte {
+                color: {{ block.settings.color_text }};
+              }
+              #block-{{ block.id }} a {
+                color: {{ block.settings.color_accent }};
+              }
+              #block-{{ block.id }} a:hover,
+              #block-{{ block.id }} a:focus {
+                color: {{ block.settings.color_text }};
+              }
+              #block-{{ block.id }} a.button {
+                color: {{ block.settings.color_accent }};
+                border-color: {{ block.settings.color_accent }};
+              }
+              #block-{{ block.id }} a.button:hover,
+              #block-{{ block.id }} a.button:focus {
+                color: {{ block.settings.color_text }};
+                border-color: {{ block.settings.color_text }};
+              }
+            </style>
+          </div>
+
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<style>
+  .mobile-image {
+  	display: none;
+  }
+  .desktop-image {
+  	display: block;
+  }
+  @media screen and (max-width: 700px) {
+  	.mobile-image {
+    	display: block;
+    }
+    .desktop-image {
+    	display: none;
+    }
+  }
+</style>
+{% schema %}
+{
+  "name": "Slideshow (Scheduling)",
+  "class": "slideshow-alt-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Expand full width",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        { "value": "3000", "label": "3 seconds" },
+        { "value": "4000", "label": "4 seconds" },
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "6000", "label": "6 seconds" },
+        { "value": "7000", "label": "7 seconds" },
+        { "value": "8000", "label": "8 seconds" },
+        { "value": "9000", "label": "9 seconds" },
+        { "value": "10000", "label": "10 seconds" }
+      ],
+      "default": "4000"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show slide dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show previous and next arrows",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1500 x 600px .jpg recommended"
+        },
+		{
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Alt Image for Mobile? (optional)",
+		  "info": "keep aspect ratios consistent if possible."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Slide link"
+        },
+		{
+		  "type":"checkbox",
+		  "id":"hide_slide",
+		  "label":"Hide this slide?"
+		},
+		{
+          "type": "text",
+          "id":"date_start",
+          "label":"Date/Time to begin showing slide"
+		},
+		{
+          "type": "text",
+          "id":"date_end",
+          "label":"Date/Time to stop showing slide"
+		},
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Slide"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add brief details about this slide.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "vertical_alignment",
+          "label": "Vertical alignment",
+          "default": "align-center",
+          "options": [
+            {"value": "align-start", "label": "Top"},
+            {"value": "align-center", "label": "Middle"},
+            {"value": "align-end", "label": "Bottom"}
+          ]
+        },
+        {
+          "type": "select",
+          "id": "horizontal_alignment",
+          "label": "Horizontal alignment",
+          "default": "justify-center",
+          "options": [
+            {"value": "justify-start", "label": "Left"},
+            {"value": "justify-center", "label": "Center"},
+            {"value": "justify-end", "label": "Right"}
+          ]
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_accent",
+          "label": "Accent",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_overlay",
+          "label": "Overlay",
+          "default": "#000000"
+        },
+        {
+          "type": "select",
+          "id": "color_overlay_alpha",
+          "label": "Overlay opacity",
+          "default": "0.3",
+          "options": [
+            {
+              "value": "0",
+              "label": "0%"
+            },
+            {
+              "value": "0.1",
+              "label": "10%"
+            },
+            {
+              "value": "0.2",
+              "label": "20%"
+            },
+            {
+              "value": "0.3",
+              "label": "30%"
+            },
+            {
+              "value": "0.4",
+              "label": "40%"
+            },
+            {
+              "value": "0.5",
+              "label": "50%"
+            },
+            {
+              "value": "0.6",
+              "label": "60%"
+            },
+            {
+              "value": "0.7",
+              "label": "70%"
+            },
+            {
+              "value": "0.8",
+              "label": "80%"
+            },
+            {
+              "value": "0.9",
+              "label": "90%"
+            },
+            {
+              "value": "1.0",
+              "label": "100%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video slide",
+      "settings": [
+        {
+          "id": "video_url",
+          "type": "video_url",
+          "label": "Background video URL",
+          "accept": ["youtube"],
+          "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1500 x 600px .jpg recommended. Fallback when autoplaying video is not supported on mobile devices"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Slide link"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Slide"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add brief details about this slide.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "vertical_alignment",
+          "label": "Vertical alignment",
+          "default": "align-center",
+          "options": [
+            {"value": "align-start", "label": "Top"},
+            {"value": "align-center", "label": "Middle"},
+            {"value": "align-end", "label": "Bottom"}
+          ]
+        },
+        {
+          "type": "select",
+          "id": "horizontal_alignment",
+          "label": "Horizontal alignment",
+          "default": "justify-center",
+          "options": [
+            {"value": "justify-start", "label": "Left"},
+            {"value": "justify-center", "label": "Center"},
+            {"value": "justify-end", "label": "Right"}
+          ]
+        },
+        {
+          "type": "color",
+          "id": "color_text",
+          "label": "Text",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_accent",
+          "label": "Accent",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_overlay",
+          "label": "Overlay",
+          "default": "#000000"
+        },
+        {
+          "type": "select",
+          "id": "color_overlay_alpha",
+          "label": "Overlay opacity",
+          "default": "0.3",
+          "options": [
+            {
+              "value": "0",
+              "label": "0%"
+            },
+            {
+              "value": "0.1",
+              "label": "10%"
+            },
+            {
+              "value": "0.2",
+              "label": "20%"
+            },
+            {
+              "value": "0.3",
+              "label": "30%"
+            },
+            {
+              "value": "0.4",
+              "label": "40%"
+            },
+            {
+              "value": "0.5",
+              "label": "50%"
+            },
+            {
+              "value": "0.6",
+              "label": "60%"
+            },
+            {
+              "value": "0.7",
+              "label": "70%"
+            },
+            {
+              "value": "0.8",
+              "label": "80%"
+            },
+            {
+              "value": "0.9",
+              "label": "90%"
+            },
+            {
+              "value": "1.0",
+              "label": "100%"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scheduled Slides",
+      "category": "Image",
+      "settings": {
+        "full_width": true,
+        "autoplay": true,
+        "autoplay_speed": "4000",
+        "show_dots": true,
+        "show_arrows": false
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

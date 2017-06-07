@@ -1,3 +1,6 @@
+{% assign year_month_day = 'now' | date: "%Y%m%d" %} 
+{% assign hour_minute = 'now' | date: "%H%M" %}
+
 <div data-section-id="{{ section.id }}" data-section-type="slideshow-section">
 
   {% if section.blocks.size > 0 %}
@@ -15,12 +18,52 @@
 
       <div class="slideshow slideshow--{{ section.settings.slideshow_height }}" id="Slideshow-{{ section.id }}" data-autoplay="{{ section.settings.autoplay }}" data-speed="{{ section.settings.autoplay_speed }}">
         {% for block in section.blocks %}
+
           {%- assign is_background_video = false -%}
           {% if block.type == 'video' %}
             {% if block.settings.video_type == 'background' or block.settings.video_type =='background-chrome' %}
               {%- assign is_background_video = true -%}
             {% endif %}
           {% endif %}
+
+          {% if block.settings.date_start != "" %}
+            <!-- DATE START NOT BLANK -->
+            {% assign show_slide = false %}
+            {% assign schedule_start = block.settings.date_start %}
+            {% assign start = schedule_start | split: '@' %}
+              
+            
+              {% if block.settings.date_end != "" %}
+              <!-- DATE END NOT BLANK -->
+                  {% assign schedule_end = block.settings.date_end %}
+                  {% assign end = schedule_end | split: '@' %}
+              {% endif %}
+      
+          
+              {% unless end[0] < year_month_day %}
+                {% if end[0] == year_month_day and end[1] < hour_minute %}{% break %}{% endif %}
+                {% if start[0] < year_month_day or start[0] == year_month_day %}
+                  {% if start[0] == year_month_day %}
+                {% if start[1] < hour_minute %}
+                        {% assign show_slide = true %}
+                {% endif %}
+              {% else %}
+                {% assign show_slide = true %}
+          {% endif %}
+                {% endif %}
+              {% endunless %}
+          
+            {% if show_slide == false %}
+              {% continue %}
+            {% endif %}
+
+          {% endif %}
+          
+          {% if block.settings.hide_slide == true %}
+            {% continue %}
+          {% endif %}
+
+
 
           <div class="slideshow__slide slideshow__slide--{{ block.id }}{% if is_background_video %} slideshow__slide--background-video{% endif %}" {{ block.shopify_attributes }}>
             {% if block.settings.link != blank %}
@@ -237,6 +280,21 @@
           "type": "url",
           "id": "link",
           "label": "Slide link"
+        },
+        {
+              "type": "text",
+              "id": "date_start",
+              "label": "Date\/Time to begin showing slide"
+        },
+        {
+              "type": "text",
+              "id": "date_end",
+              "label": "Date\/Time to stop showing slide"
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_slide",
+          "label":"Hide this slide?"
         }
       ]
     },
