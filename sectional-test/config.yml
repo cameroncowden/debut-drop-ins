@@ -2,11 +2,17 @@
 development:
   password: bcf0bcab74e1db6b560f55e1cb7ea9e9
   store: sectional-test.myshopify.com
-<<<<<<< HEAD
   theme_id: 175320912
-=======
+  ignore_files:
+    - config/settings_data.json
+    - "*.gif"
+    - "*.png"
+    - "*.jpg"
+production:
+  password: bcf0bcab74e1db6b560f55e1cb7ea9e9
+  store: sectional-test.myshopify.com
   theme_id: 70500933
->>>>>>> master
+  readonly: true
   ignore_files:
     - config/settings_data.json
     - "*.gif"
