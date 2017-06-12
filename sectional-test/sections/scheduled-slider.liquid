@@ -1,3 +1,6 @@
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
 {% assign year_month_day = 'now' | date: "%Y%m%d" %} 
 {% assign hour_minute = 'now' | date: "%H%M" %}
 <div class="slideshow slideshow-{{ section.id }} section-standard no-border" data-section-id="{{ section.id }}" data-section-type="slideshow-section">
@@ -175,6 +178,80 @@
     }
   }
 </style>
+
+<script>
+(function(){
+    // Initialization
+    function init($container){
+      var $carousel = $container.find('.slideshow-carousel');
+      var flickityOptions = $carousel.data('flickity-options');
+      // Pass options from data attribute object
+      $carousel.flickity(flickityOptions);
+
+      // Load YouTube videos
+      var $videoSlides = $container.find('.slide__item-video');
+      $videoSlides.each(function(){
+        var $slideVideo = $(this).find('.slide__item-image')
+        var videoId = $(this).data('video-id');
+
+        $slideVideo.YTPlayer({
+          fitToBackground: true,
+          videoId: videoId,
+          repeat: true,
+          mute: true,
+          playerVars: {
+            rel: 0
+          }
+        });
+      });
+    }
+
+    function blockSelect(evt){
+      var $block = $('#block-' + evt.detail.blockId);
+      var $carousel = $block.closest('.slideshow-carousel');
+      var slideIndex = $block.data('slide-index');
+      // Pause flickity and select the current block
+      $carousel.flickity('pausePlayer');
+      $carousel.flickity('select', slideIndex, true, true);
+    }
+    function blockDeselect(evt){
+      var $block = $('#block-' + evt.detail.blockId);
+      var $carousel = $block.closest('.slideshow-carousel');
+      // Unpause player
+      $carousel.flickity('unpausePlayer');
+    }
+    // Unload
+    function unload(evt){
+      var $section = $('.slideshow-' + evt.detail.sectionId);
+      var $carousel = $section.find('.slideshow-carousel');
+      // Destroy flickity to be rebuilt
+      $carousel.flickity('destroy');
+
+      // Destroy YouTube
+      var $slideVideo = $section.find('.slide__item-video .slide__item-image');
+      // Destroy
+      $slideVideo.removeData('yt-init')
+                 .removeData('ytPlayer')
+                 .removeClass('loaded');
+
+      $(window).off('resize.YTplayer' + $slideVideo.ID);
+      $(window).off('scroll.YTplayer' + $slideVideo.ID);
+
+      $slideVideo.$body = null;
+      $slideVideo.$node = null;
+      $slideVideo.$YTPlayerString = null;
+      $slideVideo.player = null;
+    }
+
+    // Public methods
+    return {
+      init: init,
+      unload: unload,
+      blockSelect: blockSelect,
+      blockDeselect: blockDeselect
+    }
+  })();
+</script>
 {% schema %}
 {
   "name": "Slideshow (Scheduling)",
