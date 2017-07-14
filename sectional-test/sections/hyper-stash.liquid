@@ -1,0 +1,88 @@
+{{ 'https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js' | script_tag }}
+{{ 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/3.0.0/lazysizes.min.js' | script_tag }}
+<style>
+	.collection {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 2rem;
+	}
+	.product {
+		flex: 1 1 25%;
+	}
+	@media screen and (max-width: 900px){
+		.collection {padding: 1rem; } 
+		.product { flex: 1 1 50%; }		
+	}
+	@media screen and (max-width: 600px){
+		.collection {padding: 10px; } 
+		.product { flex: 1 1 100%; }
+	}
+</style>
+
+<h1>HyperStash Collection Test </h1>
+<section class="hyperdrive">
+	<div id="target">Loading...</div>
+
+</section>
+
+<script id="template" type="x-tmpl-mustache">
+{% raw %}
+{{=<% %>=}}
+<h2><% title %></h2>
+<div class="collection">
+<%#products%>
+	<div class="product">
+	<img src="<% thumb %>" class="lazyload" data-src="<% image %>">
+	<h3><% title %></h3>
+	<small><% price %></small>
+	<p>list:<% list %></p>
+	</div>
+<%/products%>
+</div>
+
+{% endraw %}
+</script>
+
+<script>
+full_collection = {
+	"title": "super fast collection",
+	"products": [
+	{%- for product in collection.products %}
+		{
+			"title":"{{ product.title }}",
+			"image" : "{{ product.featured_image | img_url: '450x' }}",
+			"thumb": "{{ product.featured_image | img_url: '300x' }}",
+			"price" : "{{ product.price | money }}"
+		}{% unless forloop.last %},{% endunless -%}
+	{%- endfor %}
+	],
+	"list": function() {
+		return this.title + ", " + this.price;
+	}
+}
+
+function getCollection() {
+	  var template = $('#template').html();
+	  Mustache.parse(template);   // optional, speeds up future uses
+	  var rendered = Mustache.render(template, full_collection);
+	  $('#target').html(rendered);
+	}
+
+$(document).ready(function(){
+	getCollection();
+});
+
+</script>
+
+{% schema %}
+  {
+    "name": "Hyper Stash",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

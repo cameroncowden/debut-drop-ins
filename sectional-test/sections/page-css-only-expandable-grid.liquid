@@ -2,12 +2,14 @@
   {% for block in section.blocks %}
       <input type="radio" class="hidden-input" name="artist-viewer" id="toggle-artist-{{ block.settings.name | handleize }}" />
       <label for="toggle-artist-{{ block.settings.name | handleize }}" class="artist-item item-{% increment count %}" {{ block.shopify_attributes }}>
-        
+        {{ block.settings.image | img_url: '400x' | img_tag: block.settings.image.alt }}
         <h2>{{ block.settings.name }}</h2>
         
       </label>
   	  <div id="artist-{{ block.settings.name | handleize }}" class="artist-profile">
-          {{ block.settings.name }}, {{ block.settings.bio }} - {{ block.settings.quote }}
+          <h2>{{ block.settings.name }}</h2>
+          <p>{{ block.settings.bio }}</p>
+          <small>{{ block.settings.quote }}</small>
       </div>
   {% endfor %}
 </section>
@@ -24,34 +26,52 @@
     justify-content: space-between;
     /*max-width: 1200px;*/
     margin: 0 auto;
-    background: whitesmoke;
+    background: #E4E4D8;
   }
   .artist-item {
   	flex: 0 0 30%;
     position: relative;
-    min-height: 350px;
-    margin: 1rem;
     padding: 1rem;
-    background: lightblue;
+    margin: 1rem;
+    background: #BDDDB6;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     text-align: center;
+    border: white solid 0.5rem;
+  }
+  .artist-item img {
+    visibility: hidden;
   }
   .artist-item h2 {
   	color: white;
     font-family:  "franklin-gothic-URW", Helvetica, Arial, sans-serif;
     font-weight: bold;
-	top: 50%;
+	  top: 50%;
     position: absolute;
     width: 100%;
     left: 0;
   }
+  .artists-grid-layout input:checked + label {
+      border-color: #608373;
+  }
+  .artists-grid-layout input:checked + label:after {
+    content:'';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5rem;
+    width: 0;
+    height: 0;
+    border-top: solid 5rem #608373;
+    border-left: solid 5rem transparent;
+    border-right: solid 5rem transparent;
+}
   .artist-profile {
   	display: block;
     width: 100%;
     height: 100%;
-	background: blue;
+	  background: #8FB49D;
     height: 0;
     opacity: 0;
     transition: all 0s ease;
@@ -59,9 +79,16 @@
     order: -1;
     color: white;
     font-size: 1rem;
-    line-height: 1rem;
+    line-height: 1.4rem;
     font-family:  "franklin-gothic-URW", Helvetica, Arial, sans-serif;
+    margin: 4.5rem 4rem 2rem 4rem;
   }
+  .artist-profile h2 {
+    color: #C4E7FB;
+  }
+  .artist-profile small {
+    color: #C4E7FB;
+  }  
   .hidden-input {
   	display: none;
   }
@@ -76,11 +103,9 @@
       height: auto;
       opacity: 1;
       flex: 1 0 90%;
-      order: calc( 3 - {{ this_count | modulo: 3}} + {{ this_count }} );
-      margin: 1rem;
+      order: calc( 3 - {{ this_count | modulo: 3}} + {{ this_count }} );      
       padding: 1rem;
       visibility: visible;
-      transition: all .5s ease;
     }
   	#toggle-artist-{{ block.settings.name | handleize }}:checked ~ label[for="toggle-artist-{{ block.settings.name | handleize }}"] {
   	  /*flex: 1 0 100%;*/

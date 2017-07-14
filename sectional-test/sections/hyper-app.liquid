@@ -1,0 +1,92 @@
+<script src="https://unpkg.com/hyperapp"></script>
+
+{% assign product = collection.products.first %}
+
+<script>
+
+"use strict";
+
+var _hyperapp = hyperapp;
+var h = _hyperapp.h;
+var app = _hyperapp.app;
+/** @jsx h */
+
+window.app_state = "";
+
+app({
+  state: {
+  	products : [
+  		{
+  			"title" : "{{ product.title }}",
+  			count : 0
+  		}
+	],
+	cart : {
+		count : 0
+	}
+  },
+  view: function view(state, actions) {
+    return h(
+      "main",
+      null,
+      h(
+        "h1",
+        null,
+        state.products[0].title
+      ),
+      h(
+        "h2",
+        null,
+        state.cart.count
+      ),
+      h(
+        "button",
+        { onclick: actions.add },
+        "+"
+      ),
+      h(
+        "button",
+        { onclick: actions.sub },
+        "-"
+      )
+    );
+  },
+  actions: {
+    add: function add(state) {
+      window.app_state = state;
+      console.log(state);
+      state.cart.count = state.cart.count + 1;
+      return state;
+    },
+    sub: function sub(state) {
+      console.log(state);
+      state.cart.count = state.cart.count - 1;
+      return state;
+      console.log(state);
+    }
+  }
+});
+
+</script>
+
+
+
+<h1>Hyper App Test</h1>
+
+<section class="hyperdrive">
+	
+
+</section>
+
+{% schema %}
+  {
+    "name": "Section name",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
