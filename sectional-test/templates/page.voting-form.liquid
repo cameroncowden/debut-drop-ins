@@ -1,0 +1,170 @@
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<style>
+  .voting-form {
+    background: #eee;
+    padding: 20px;
+    margin: 0 0 20px 0;
+  }
+  select {
+    width: 200px;
+    text-align: center;
+  }
+
+  .chart {
+    padding: 20px;
+  }
+  .chart div {
+    font-size: 20px;
+    text-align: right;
+    padding: 5px;
+    margin: 0 0 3px 0;
+    color: white;
+  }
+  .chart div:nth-of-type(1) {
+    background-color: #FDBE1A;
+  }
+  .chart div:nth-of-type(2) {
+    background-color: #F2B6A0;
+  }
+  .chart div:nth-of-type(3) {
+    background-color: #FFD85A;
+  }
+  .chart div:nth-of-type(4) {
+    background-color: #830C07;
+  }
+  .chart div:nth-of-type(5) {
+    background-color: #999999;
+  }
+</style>
+
+<div class="page-width">
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div>
+      <div class="rte">
+      	{{ page.content }}
+      </div>
+
+      <div>
+      	<form action="#0" id="voting-form" class="voting-form">
+        <h1>Which of these emojis is your favorite?</h1>
+        <div style="display: inline-block">
+          <select name="emoji_choice" id="emoji_choice">
+            <option value="👯">👯</option>
+            <option value="🍑">🍑</option>
+            <option value="💥">💥</option>
+            <option value="🍕">🍕</option>
+            <option value="☠️">☠️</option>
+          </select>
+        </div>
+        <div style="float:right">
+          <input type="submit" value="Vote">
+        </div>
+      </form>
+
+      <div class="chart">
+        <h2>The last 100 votes</h2>
+      </div> 
+      </div>
+    </div>
+  </div>
+</div>
+<script> 
+// sort with _createdTime ??
+var airtable_read_endpoint = "https://api.airtable.com/v0/appv6ACyVwxA0BHjl/emoji_votes?maxRecords=100&view=Grid%20view&api_key=key9Av6ddrSstqjOb";
+
+var airtable_write_endpoint = "https://api.airtable.com/v0/appv6ACyVwxA0BHjl/emoji_votes?api_key=key9Av6ddrSstqjOb";
+
+// Write API
+var form = document.querySelector("#voting-form");
+var select = document.querySelector("#emoji_choice");
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  axios.post(airtable_write_endpoint, {
+    "fields": {
+      "Emoji Choice": select.options[select.selectedIndex].value
+    }
+  })
+  .then(function(response) {
+    // give it a little bit for data to hit AirTable
+    setTimeout(function() {
+      getDataAndBuild();
+    }, 750);
+  })
+});
+
+var pollData = {};
+var chartData = [];
+
+function getDataAndBuild() {
+  
+  // zero out data
+  pollData = {
+    "👯": 0,
+    "🍑": 0,
+    "💥": 0, 
+    "🍕": 0, 
+    "☠️": 0
+  };
+  emojis = ["👯", "🍑", "💥", "🍕", "☠️"];
+  chartData = [0, 0, 0, 0, 0];
+  
+  console.log("Getting data");
+  axios
+    .get(airtable_read_endpoint)
+    .then(function(result) {
+      console.log("Got data (showing first record): ", result.data.records[0]);
+      result.data.records.forEach(function(element, index) {
+        pollData[element.fields["Emoji Choice"]]++;
+      });
+      console.log("Updated poll data: ", pollData);
+
+      // Turn Object into Array (for chart)
+      var i = 0;
+      for (var prop in pollData) {
+        chartData[i] = pollData[prop];
+        i++;
+      }
+      console.log("Made chart data: ", chartData);
+
+      buildChart(chartData);
+    }); 
+}
+
+function buildChart(data) {
+  console.log("Building chart with this data: ", data);
+  
+  var x = d3.scaleLinear()
+    .domain([0, d3.max(data)])
+    .range([0, 400]);
+  
+  d3
+    .select(".chart")
+    .selectAll("div")
+    .remove();
+  
+  // Wait a sec? Apparently d3 needs to catch its breath.
+  setTimeout(function() {
+    d3
+      .select(".chart")
+      .selectAll("div")
+      .data(data)
+      .enter()
+      .append("div")
+      .style("width", function(d) { 
+        return x(d) + "px"; 
+      })
+      .text(function(d, i) {
+        return emojis[i] + " " + d; 
+      });
+   }, 200);
+}
+
+// Kick things off!
+getDataAndBuild();
+
+
+</script>

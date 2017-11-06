@@ -1,0 +1,44 @@
+{% comment %}
+	Add a checkbox to the form for each product-addon
+{% endcomment %}
+{% for product_tag in product.tags %}
+    {% assign tag_tokens = product_tag | split: '=' %}
+    {% assign num_tokens = tag_tokens | size %}
+    {% if num_tokens == 2 %}
+        {% assign first_token = tag_tokens | first %}
+        {% assign last_token = tag_tokens | last %}
+        {% if first_token == "include-addon" %}
+            {% assign addon_id = last_token %}
+                <div class="product-form__item product-form__item--addon" data-variant-id="{{ addon_id }}"></div>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+<script type ="text/javascript">
+  var addon_ids = [];
+  $('.product-form__item--addon').each(function(){
+    var form_div = $(this);
+    var addon_variant_id = form_div.attr("data-variant-id");
+    $.ajax({
+      type: "GET",
+      url: "/admin/variants/"+ addon_variant_id +".json",
+      cache: false,
+      success: function(variant_data){
+        var product_api_url = "/admin/products/" + variant_data.variant.product_id + ".json";
+        $.ajax({
+          type: "GET",
+          url: product_api_url,
+          cache: false,
+          success: function(product_data){
+            var form_html = "<label>"+ product_data.product.title +"</label>";
+            form_html += '<input type="checkbox" name="addon" value="{{ addon_id }}">';
+            form_div.html(form_html);
+            addon_ids.push(addon_variant_id);
+          }
+        });
+     }
+      
+    $('#AddToCart-product-template').unbind('click');
+  });
+});
+</script>

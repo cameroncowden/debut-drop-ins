@@ -133,6 +133,8 @@
                 <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" class="product-form__input" pattern="[0-9]*">
               </div>
             {% endif %}
+              
+            {% include 'product-addon' %}
 
             <div class="product-form__item product-form__item--submit">
               <button type="submit" name="add" id="AddToCart-{{ section.id }}" class="btn product-form__cart-submit{% if product.options.size == 1 and product.variants[0].title == 'Default Title' %} product-form__cart-submit--small{% endif %}">
@@ -145,12 +147,18 @@
 
         <div class="product-single__description rte" itemprop="description">
           {{ product.description }}
+          
         </div>
 
         {% if section.settings.show_share_buttons %}
           {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
         {% endif %}
       </div>
+    </div>
+    <div class="grid__item">
+      {% if product.metafields.tabs %}
+        {% include 'product-tabs' %}
+      {% endif %}
     </div>
   </div>
 </div>

@@ -1,0 +1,72 @@
+<div class="tab-container">
+  {% for tab in product.metafields.tabs %}
+  <input type="radio" name="tabs" id="{{ tab | first | handleize }}" {% if forloop.first %}checked{% endif %}>
+  {% endfor %}
+
+  <div class="tab-headers">
+    {% for tab in product.metafields.tabs %}
+    <label for="{{ tab | first | handleize }}" class="tab-title">{{ tab | first }}</label>
+    {% endfor %}
+  </div>
+  <div class="tab-contents">
+    {% for tab in product.metafields.tabs %}
+    {% unless tab.first == 'Video' %}
+    <section class="tab-content {{ tab | first | handleize }}">
+      <p>{{ tab | last }}</p>
+    </section> 
+    {% else %}
+    <section class="tab-content {{ tab | first | handleize }} video">
+      <iframe src="{{ tab | last }}"></iframe>
+    </section>    
+    {% endunless %}
+
+    {% endfor %}              
+  </div>
+</div>
+<style type="text/css">
+  {% for tab in product.metafields.tabs %}
+  input#{{ tab | first | handleize }}:checked ~ .tab-contents .{{ tab | first | handleize }} {
+    display: block;
+  }
+  {% endfor %}
+
+
+  .tab-container {
+    padding: 1rem 2rem;
+  }
+
+  .tab-container input {
+    display: none;
+  }
+
+  .tab-headers {
+    padding: 0 2rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .tab-headers label {
+    padding: .5rem 1rem;
+    background: #ececec;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .tab-headers label:hover {
+    text-decoration: underline;
+  }
+
+  .tab-contents {
+    padding: 2rem 1rem;
+    background: #ececec;
+  }
+  .tab-contents li {
+  	list-style-type: circle;
+    list-style-position: inside;
+  }
+  .tab-content { display: none; }
+  .tab-headers label:not(:last-of-type) {
+    margin-right: 1rem;
+  }
+
+</style>

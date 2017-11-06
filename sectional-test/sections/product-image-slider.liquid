@@ -1,0 +1,416 @@
+<div class="product-template__container page-width" itemscope itemtype="http://schema.org/Product" id="ProductSection-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true">
+  <meta itemprop="name" content="{{ product.title }}">
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product.featured_image.src | img_url: '800x' }}">
+
+  
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+  <script>
+    /*!
+ * Flickity sync v2.0.0
+ * enable sync for Flickity
+ */
+
+/*jshint browser: true, undef: true, unused: true, strict: true*/
+
+( function( window, factory ) {
+  // universal module definition
+  /*jshint strict: false */ /*globals define, module, require */
+  if ( typeof define == 'function' && define.amd ) {
+    // AMD
+    define( [
+      'flickity/js/index',
+      'fizzy-ui-utils/utils'
+    ], factory );
+  } else if ( typeof module == 'object' && module.exports ) {
+    // CommonJS
+    module.exports = factory(
+      require('flickity'),
+      require('fizzy-ui-utils')
+    );
+  } else {
+    // browser global
+    window.Flickity = factory(
+      window.Flickity,
+      window.fizzyUIUtils
+    );
+  }
+
+}( window, function factory( Flickity, utils ) {
+
+'use strict';
+
+// -------------------------- sync prototype -------------------------- //
+
+// Flickity.defaults.sync = false;
+
+Flickity.createMethods.push('_createSync');
+
+Flickity.prototype._createSync = function() {
+  this.syncers = {};
+  var syncOption = this.options.sync;
+
+  this.on( 'destroy', this.unsyncAll );
+
+  if ( !syncOption ) {
+    return;
+  }
+  // HACK do async, give time for other flickity to be initalized
+  var _this = this;
+  setTimeout( function initSyncCompanion() {
+    _this.sync( syncOption );
+  });
+};
+
+/**
+ * sync
+ * @param {Element} or {String} elem
+ */
+Flickity.prototype.sync = function( elem ) {
+  elem = utils.getQueryElement( elem );
+  var companion = Flickity.data( elem );
+  if ( !companion ) {
+    return;
+  }
+  // two hearts, that beat as one
+  this._syncCompanion( companion );
+  companion._syncCompanion( this );
+};
+
+/**
+ * @param {Flickity} companion
+ */
+Flickity.prototype._syncCompanion = function( companion ) {
+  var _this = this;
+  function syncListener() {
+    var index = _this.selectedIndex;
+    // do not select if already selected, prevent infinite loop
+    if ( companion.selectedIndex != index ) {
+      companion.select( index );
+    }
+  }
+  this.on( 'select', syncListener );
+  // keep track of all synced flickities
+  // hold on to listener to unsync
+  this.syncers[ companion.guid ] = {
+    flickity: companion,
+    listener: syncListener
+  };
+};
+
+/**
+ * unsync
+ * @param {Element} or {String} elem
+ */
+Flickity.prototype.unsync = function( elem ) {
+  elem = utils.getQueryElement( elem );
+  var companion = Flickity.data( elem );
+  this._unsync( companion );
+};
+
+/**
+ * @param {Flickity} companion
+ */
+Flickity.prototype._unsync = function( companion ) {
+  if ( !companion ) {
+    return;
+  }
+  // I love you but I've chosen darkness
+  this._unsyncCompanion( companion );
+  companion._unsyncCompanion( this );
+};
+
+/**
+ * @param {Flickity} companion
+ */
+Flickity.prototype._unsyncCompanion = function( companion ) {
+  var id = companion.guid;
+  var syncer = this.syncers[ id ];
+  this.off( 'select', syncer.listener );
+  delete this.syncers[ id ];
+};
+
+Flickity.prototype.unsyncAll = function() {
+  for ( var id in this.syncers ) {
+    var syncer = this.syncers[ id ];
+    this._unsync( syncer.flickity );
+  }
+};
+
+// -----  ----- //
+
+return Flickity;
+
+}));
+  </script>
+  <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+  <style>
+    .product-image-thumbnail-slider {
+      width: 100%;
+    }
+    li.variant-image, li.product-image {
+      width: 100%;
+    }
+    li.variant-image img, li.product-image img {
+      width: 100%;
+    }
+    .variant-image-thumbnail, .product-image-thumbnail  {
+      width: 25%;
+      list-style-type: none;
+    }
+
+    .product-image-thumbnail img {
+        width: 100%;
+        border: 1px solid #ececec;
+    }
+    .variant-image-thumbnail img {
+        width: 100%;
+        border: 1px solid #ececec;
+    }
+
+    img.single-product-image {
+        width: 100%;
+    }
+    li.product-image-thumbnail.is-selected, li.variant-image-thumbnail.is-selected {
+        border: 2px solid #efefef;
+    }
+    
+  </style>
+
+  <div class="grid product-single">
+    <div class="grid__item product-images medium-up--one-half">
+    {% comment %} BEGIN PRODUCT IMAGE SLIDER {% endcomment %}
+    	{% for variant in product.variants %}
+          {% if variant.image %}
+            {% assign product_has_variant_images = true %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+        {% if product.images.size > 1 or product_has_variant_images %}
+          <ul class="product-image-slider">
+            {% for image in product.images %}
+              {% unless image.attached_to_variant? %}
+                <li class="product-image" data-product-handle="{{ product.handle }}">
+                  <img src="{{ image | product_img_url: 'grande', format: 'pjpg' }}" alt="{{ image.alt | escape }}" >
+                </li>
+              {% endunless %}
+            {% endfor %}
+            {% for variant in product.variants %}
+              {% if variant.image %}
+                <li class="variant-image" data-variant-id="{{ variant.id }}" data-variant-option-{{ product.option1 }}="{{ variant.option1 }}" 
+                {% if variant.option2 %} data-variant-option-{{ product.option2 }}="{{ variant.option2 }}" {% endif %}
+                {% if variant.option2 %} data-variant-option-{{ product.option2 }}="{{ variant.option2 }}" {% endif %}
+                {% if variant.option3 %} data-variant-option-{{ product.option3 }}="{{ variant.option3 }}" {% endif %}
+                {% if variant.option3 %} data-variant-option-{{ product.option3 }}="{{ variant.option3 }}" {% endif %}>
+                  <img src="{{ variant.image | img_url: 'grande', format: 'pjpg' }}" alt="{{ variant.image.alt | escape }}" >
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+          <ul class="product-image-thumbnail-slider">
+            {% for image in product.images %}
+              {% unless image.attached_to_variant? %}
+                <li class="product-image-thumbnail" data-product-handle="{{ product.handle }}">
+                  <img src="{{ image | product_img_url: 'grande', format: 'pjpg' }}" alt="{{ image.alt | escape }}" >
+                </li>
+              {% endunless %}
+            {% endfor %}
+            {% for variant in product.variants %}
+              {% if variant.image %}
+                <li class="variant-image-thumbnail" data-variant-id="{{ variant.id }}" data-variant-option-{{ product.option1 }}="{{ variant.option1 }}" 
+                {% if variant.option2 %} data-variant-option-{{ product.option2 }}="{{ variant.option2 }}" {% endif %}
+                {% if variant.option2 %} data-variant-option-{{ product.option2 }}="{{ variant.option2 }}" {% endif %}
+                {% if variant.option3 %} data-variant-option-{{ product.option3 }}="{{ variant.option3 }}" {% endif %}
+                {% if variant.option3 %} data-variant-option-{{ product.option3 }}="{{ variant.option3 }}" {% endif %}>
+                  <img src="{{ variant.image | img_url: 'grande', format: 'pjpg' }}" alt="{{ variant.image.alt | escape }}" >
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% else %}
+          {{ product.images.first | product_img_url: 'grande', format: 'pjpg' | img_tag: product.images.first.alt ,'single-product-image' }}
+        {% endif %}
+      
+      
+    </div>
+
+    <div class="grid__item {{ product_description_width }}">
+      <div class="product-single__meta">
+
+        <h1 itemprop="name" class="product-single__title">{{ product.title }}</h1>
+
+        {% if section.settings.show_vendor %}
+          <p itemprop="brand" class="product-single__vendor">{{ product.vendor }}</p>
+        {% endif %}
+
+        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+
+          <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+          <p class="product-single__price{% unless product.available %} product-price--sold-out{% endunless %}">
+            {% if current_variant.compare_at_price > current_variant.price %}
+                <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                <s id="ComparePrice-{{ section.id }}">{{ current_variant.compare_at_price | money }}</s>
+                <span class="product-price__price product-price__price-{{ section.id }} product-price__sale product-price__sale--single">
+                  <span id="ProductPrice-{{ section.id }}">{{ current_variant.price | money }}</span>
+                  <span class="product-price__sale-label product-price__sale-label-{{ section.id }}">{{ 'products.product.on_sale' | t }}</span>
+                </span>
+            {% else %}
+              <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+              <s id="ComparePrice-{{ section.id }}" class="hide">{{ current_variant.compare_at_price | money }}</s>
+              <span class="product-price__price product-price__price-{{ section.id }}">
+                <span id="ProductPrice-{{ section.id }}">{{ current_variant.price | money }}</span>
+                <span class="product-price__sale-label product-price__sale-label-{{ section.id }} hide">{{ 'products.product.on_sale' | t }}</span>
+              </span>
+            {% endif %}
+          </p>
+
+          <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form product-form-{{ section.id }}{% unless section.settings.show_variant_labels %} product-form--hide-variant-labels{% endunless %}" data-section="{{ section.id }}">
+            <select name="id" id="ProductSelect-{{ section.id }}" data-section="{{ section.id }}" class="product-form__variants">
+              {% for variant in product.variants %}
+                {% if variant.available %}
+
+                  {% comment %}
+                    Note: if you use option_selection.js, your <select> tag will be overwritten, meaning what you have inside <option> will not reflect what you coded below.
+                  {% endcomment %}
+                  <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }}</option>
+
+                {% else %}
+                  <option disabled="disabled">
+                    {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                  </option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            {% if section.settings.show_quantity_selector %}
+              <div class="product-form__item product-form__item--quantity">
+                <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+                <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" class="product-form__input" pattern="[0-9]*">
+              </div>
+            {% endif %}
+              
+            {% include 'product-addon' %}
+
+            <div class="product-form__item product-form__item--submit">
+              <button type="submit" name="add" id="AddToCart-{{ section.id }}" class="btn product-form__cart-submit{% if product.options.size == 1 and product.variants[0].title == 'Default Title' %} product-form__cart-submit--small{% endif %}">
+                <span id="AddToCartText-{{ section.id }}">{{ 'products.product.add_to_cart' | t }}</span>
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="product-single__description rte" itemprop="description">
+          {{ product.description }}
+        </div>
+
+        {% if section.settings.show_share_buttons %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if collection %}
+  <div class="text-center return-link-wrapper">
+    <a href="{{ collection.url }}" class="btn btn--secondary btn--has-icon-before return-link">
+      {% include 'icon-arrow-left' %}
+      {{ 'products.product.back_to_collection' | t: title: collection.title }}
+    </a>
+  </div>
+{% endif %}
+
+{% unless product.empty? %}
+  <script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+  </script>
+{% endunless %}
+  
+  
+<script>
+{% if product.images.size > 1 or product_has_variant_images %}
+var vc = document.querySelector('.product-image-slider');
+var flkty = new Flickity( vc, {
+  // options
+  cellAlign: 'center',
+  imagesLoaded: true,
+  sync: '.product-image-thumbnail-slider',
+});
+
+var vtc = document.querySelector('.product-image-thumbnail-slider');
+var flktythumbs = new Flickity( vtc, {
+  // options
+  cellAlign: 'left',
+  contain: true,
+  imagesLoaded: true,
+  pageDots: false
+
+});
+{% endif %}
+
+</script>
+
+{% schema %}
+{
+  "name": "Product pages",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Image size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "full",
+          "label": "Full-width"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show quantity selector",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_labels",
+      "label": "Show variant labels",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable image zoom",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social sharing buttons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
