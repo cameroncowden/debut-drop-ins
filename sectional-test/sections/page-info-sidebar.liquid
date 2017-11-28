@@ -1,0 +1,30 @@
+{% for block in section.blocks %}
+	<a href="{{ block.link.url }}" {{ block.shopify_attributes }}>{{ block.link.title }}</a>
+{% endfor %}
+
+{% schema %}
+  {
+    "name": "Info Page Sidebar",
+    "class": "sidebar-layout",
+    "settings": [],
+    "blocks" : [
+    	{
+    		"type": "sidebar-link",
+    		"name": "Sidebar Link",
+    		"settings" : [
+    		{
+    			"type":"url",
+    			"id" : "link",
+    			"label" : "Page for Sidebar"
+    		}
+    		]
+    	}
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
