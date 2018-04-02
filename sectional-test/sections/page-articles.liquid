@@ -1,0 +1,106 @@
+{% assign art0 = articles[section.settings.featured-article] %}
+{% assign art1 = articles[section.settings.featured-article2] %}
+{% assign art2 = articles[section.settings.featured-article3] %}
+<section>
+  <div>
+      <a href="{{ art0.url }}">
+          <h1>{{ art0.title }}</h1>
+      </a>
+      {{ art0.image | img_url: 'master' | img_tag: art0.excerpt, 'art-image art0' }}
+      {% if art0.excerpt %}
+      <p>{{ art0.excerpt }}</p>
+      {% else %}
+      <p>{{ art0.content | truncate: 75 }}</p>
+      {% endif %}
+  </div>
+  <div>
+      <a href="{{ art1.url }}">
+          <h1>{{ art1.title }}</h1>
+      </a>
+      {{ art1.image | img_url: 'master' | img_tag: art1.excerpt, 'art-image art0' }}
+      {% if art1.excerpt %}
+      <p>{{ art1.excerpt }}</p>
+      {% else %}
+      <p>{{ art1.content | truncate: 75 }}</p>
+      {% endif %}
+  </div>
+  <div>
+      <a href="{{ art2.url }}">
+          <h1>{{ art2.title }}</h1>
+      </a>
+      {{ art2.image | img_url: 'master' | img_tag: art2.excerpt, 'art-image art0' }}
+      {% if art2.excerpt %}
+      <p>{{ art2.excerpt }}</p>
+      {% else %}
+      <p>{{ art2.content | truncate: 75 }}</p>
+      {% endif %}
+  </div>
+</section>
+<h2 style="text-align: center;">Alternate Method: looping </h2>
+<p style="text-align: center;">Some special translational steps required to pull by handle from a global array.</p>
+{% capture article_handles %}
+{{- section.settings.featured-article }},{{ section.settings.featured-article2 }},{{ section.settings.featured-article3 -}}
+{% endcapture %}
+
+{% assign articles_array = article_handles | split: ',' %}
+<section>
+  
+{% for article_handle in articles_array %}
+{%- capture src_handle %}{{ article_handle }}{%- endcapture -%}
+{%- assign src_strip = src_handle  | strip -%}
+{%- assign art = articles[src_strip] -%}
+
+  <div>
+      <a href="{{ art.url }}">
+          <h1>{{ art["title"] }}</h1>
+      </a>
+      {{ art.image | img_url: 'master' | img_tag: art.excerpt, 'art-image' }}
+      {% if art.excerpt %}
+      <p>{{ art.excerpt }}</p>
+      {% else %}
+      <p>{{ art.content | truncate: 75 }}</p>
+      {% endif %}
+  </div>
+{% endfor %}
+</section>
+
+{% schema %}
+  {
+    "name": "Articles Showcase",
+    "settings": [
+		{
+          "type": "article",
+          "id": "featured-article",
+          "label": "Featured Article"
+        },
+        {
+          "type": "article",
+          "id": "featured-article2",
+          "label": "Featured Article 2"
+        },
+        {
+          "type": "article",
+          "id": "featured-article3",
+          "label": "Featured Article 3"
+        }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+div#shopify-section-page-articles section {
+    display: flex;
+}
+
+div#shopify-section-page-articles section div {
+    flex: 0 0 33%;
+}
+@media screen only and (max-width: 1000px) {
+	div#shopify-section-page-articles section div {
+      flex: 0 0 100%;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

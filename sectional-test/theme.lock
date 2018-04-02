@@ -87,6 +87,8 @@ sections/map.liquid:
   development: 2016-09-27T12:53:22-05:00   6b1bb01477c504f75d55d42ff5b1f1d2
 sections/meet-the-team.liquid:
   development: 2016-12-20T17:24:39-06:00   44a9ed9127aad8503ba599b3e6122f4f
+sections/page-articles.liquid:
+  development: 2018-04-02T14:36:36-05:00   d31c909368be435c79af1f78ede3541f
 sections/page-content-rows-with-text.liquid:
   development: 2016-12-20T16:24:41-06:00   5e16575ca373955f0080a342577b35ad
 sections/page-css-only-expandable-grid.liquid:
@@ -283,6 +285,8 @@ templates/index.liquid:
   development: 2017-08-31T18:16:00-05:00   56b51b6f96394db4b17c64b43e1c0010
 templates/list-collections.liquid:
   development: 2016-09-27T12:53:25-05:00   15196b39880ae82958038821e31de5c9
+templates/page.articles.liquid:
+  development: 2018-04-02T14:00:21-05:00   5965a4b25aa9d0d2b31cfd23a93a4fd4
 templates/page.contact.liquid:
   development: 2016-09-27T12:53:25-05:00   854f7fd02acf64bc9ce31bfd6994f791
 templates/page.content-rows-with-text.liquid:
